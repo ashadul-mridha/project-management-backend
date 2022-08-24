@@ -1,0 +1,38 @@
+{
+  "name": "web-agency-server",
+  "version": "1.0.0",
+  "description": "This is server for web agency create with node.js mysql with orm sequelize",
+  "main": "index.js",
+  "scripts": {
+    "server": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ashadul-mridha/web-agency-server.git"
+  },
+  "keywords": [
+    "node.js",
+    "mysql",
+    "agency",
+    "server",
+    "sequelize"
+  ],
+  "author": "ashadul-mridha",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ashadul-mridha/web-agency-server/issues"
+  },
+  "homepage": "https://github.com/ashadul-mridha/web-agency-server#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "express-fileupload": "^1.4.0",
+    "jsonwebtoken": "^8.5.1",
+    "mysql2": "^2.3.3",
+    "nodemon": "^2.0.19",
+    "sequelize": "^6.21.3"
+  }
+}
