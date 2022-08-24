@@ -31,6 +31,9 @@ db.sequelize = sequelize;
 
 //db object model
 db.user = require('./userModel')(sequelize, DataTypes);
+db.project = require('./projectModel')(sequelize, DataTypes);
+db.projectStatus = require('./projectStatusModel')(sequelize, DataTypes);
+db.task = require('./taskModel')(sequelize, DataTypes);
 db.setting = require('./settingModel')(sequelize, DataTypes);
 
 //database with model and create table
@@ -40,6 +43,13 @@ db.sequelize.sync({force: false})
 })
 .catch( err => {
     console.log(err);
+})
+
+//all relations
+
+// 1 to many relation
+db.project.hasMany(db.projectStatus , {
+  foreignKey: 'projectId'
 })
 
 module.exports = db;

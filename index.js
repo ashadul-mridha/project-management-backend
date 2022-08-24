@@ -6,6 +6,9 @@ const fileUpload = require('express-fileupload');
 
 // import router
 const userRouter = require('./routers/userRouter');
+const projectRouter = require('./routers/projectRouter');
+const projectStatusRouter = require('./routers/projectStatusRouter');
+const taskRouter = require('./routers/taskRouter');
 const settingRouter = require('./routers/settingRouter');
 
 //import middleware
@@ -27,6 +30,9 @@ app.use(express.static(path.join(__dirname, "public")));
 
 //all router
 app.use('/api/user' , userRouter);
+app.use('/api/project' , projectRouter);
+app.use('/api/projectStatus' , projectStatusRouter);
+app.use('/api/task' , taskRouter);
 app.use('/api/setting' , settingRouter);
 
 //testing api
