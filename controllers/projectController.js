@@ -6,6 +6,7 @@ const uploadFolder = path.join( __dirname , '/../public/images/uploads/project')
 //Import model
 const Project = db.project;
 const ProjectStatus = db.projectStatus;
+const Task = db.task;
 
 //const add new hero section data
 const addData = async (req,res) => {
@@ -72,14 +73,8 @@ const addData = async (req,res) => {
 //get all data
 const getAllData = async (req, res) => {
     try {
-        const data = await Project.findAll({
-            include:[{
-                model: ProjectStatus
-            }],
-        });
+        const data = await Project.findAll({});
 
-        console.log(req.user);
-        
         res.send({
           status: true,
           message: "Data Get Successfull",
@@ -97,11 +92,14 @@ const getAllData = async (req, res) => {
     }
 }
 
+
 //get single data
 const getDataByID = async (req,res) => {
     try {
         const {id} = req.params;
-        const data = await Project.findOne({ where : {id: id}})
+        const data = await Project.findOne({ where : {id: id}, 
+          include:[{model: ProjectStatus , include :{model: Task}}]
+        })
         res.send({
           status: true,
           message: "Data Get Successfull",

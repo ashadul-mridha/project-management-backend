@@ -51,5 +51,20 @@ db.sequelize.sync({force: false})
 db.project.hasMany(db.projectStatus , {
   foreignKey: 'projectId'
 })
+db.project.hasMany(db.task , {
+  foreignKey: 'projectId'
+})
+db.projectStatus.hasMany(db.task , {
+  foreignKey: 'statusId'
+})
+
+// many to one relation
+db.task.belongsTo(db.project , {
+  foreignKey: 'projectId'
+})
+
+db.task.belongsTo(db.projectStatus , {
+  foreignKey: 'statusId'
+})
 
 module.exports = db;

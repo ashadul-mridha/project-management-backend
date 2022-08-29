@@ -2,6 +2,7 @@ const db = require('../models');
 
 //Import model
 const ProjectStatus = db.projectStatus;
+const Task = db.task;
 
 //const add new hero section data
 const addData = async (req,res) => {
@@ -34,7 +35,11 @@ const addData = async (req,res) => {
 //get all data
 const getAllData = async (req, res) => {
     try {
-        const data = await ProjectStatus.findAll({});
+        const data = await ProjectStatus.findAll({
+          include:[{
+                model: Task
+          }]
+        });
 
         console.log(req.user);
         

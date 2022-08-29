@@ -2,6 +2,8 @@ const db = require('../models');
 
 //Import model
 const Task = db.task;
+const ProjectStatus = db.projectStatus;
+const Project = db.project;
 
 //const add new hero section data
 const addData = async (req,res) => {
@@ -72,6 +74,30 @@ const getDataByID = async (req,res) => {
     }
 }
 
+//get data by project id
+const getDataByProjectID = async (req, res) => {
+    try {
+        const {projectId} = req.params;
+        const data = await Task.findAll({ 
+          where : {projectId: projectId},
+          include:[{model: Project}, {model: ProjectStatus}]
+        })
+
+        res.send({
+          status: true,
+          message: "Data Get Successfull",
+          data : data,
+          statusCode: 200
+        })
+    } catch (error) {
+        res.send({
+          status: false,
+          message: error.message,
+          data : null,
+          statusCode: 500
+        }) 
+    }
+}
 
 //Update single data by using id
 const updateDataByID = async (req,res) => {
@@ -123,6 +149,7 @@ module.exports = {
     addData,
     getAllData,
     getDataByID,
+    getDataByProjectID,
     updateDataByID,
     deleteDataById
 }
