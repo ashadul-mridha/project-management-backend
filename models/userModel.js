@@ -37,6 +37,22 @@ module.exports = (sequelize , DataTypes) => {
         active: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
+        },
+        createdBy: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+        },
+        updatedBy: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+        },
+        deletedBy: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+        },
+        deletedAt: {
+            type: DataTypes.DATE,
+            allowNull: true,
         }
     })
 

@@ -9,6 +9,10 @@ module.exports = (sequelize , DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false
         },
+        slug: {
+            type: DataTypes.TEXT,
+            allowNull: false
+        },
         desc: {
             type: DataTypes.STRING,
             allowNull: false
@@ -29,6 +33,26 @@ module.exports = (sequelize , DataTypes) => {
             type: DataTypes.DATE,
             allowNull: true
         },
+        createdBy: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+        },
+        updatedBy: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+        },
+        deletedBy: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+        },
+        status: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+        },
+        deletedAt: {
+            type: DataTypes.DATE,
+            allowNull: true,
+        }
         // isComplete: {
         //     type: DataTypes.ENUM(true, false),
         //     defaultValue: false,
