@@ -74,11 +74,12 @@ const addData = async (req,res) => {
 //get all data
 const getAllData = async (req, res) => {
     try {
+
         const data = await TaskImage.findAll({});
 
         res.send({
           status: true,
-          message: "Data Get Successfull",
+          message: "Data get successfull",
           data : data,
           statusCode: 200
         })
@@ -98,9 +99,7 @@ const getAllData = async (req, res) => {
 const getDataByID = async (req,res) => {
     try {
         const {id} = req.params;
-        const data = await TaskImage.findOne({ where : {id: id}, 
-          include:[{model: ProjectStatus , include :{model: Task}}]
-        })
+        const data = await TaskImage.findOne({ where : {id: id} })
         res.send({
           status: true,
           message: "Data Get Successfull",
@@ -128,57 +127,57 @@ const updateDataByID = async (req,res) => {
         let finalFileName = storedData.image;
 
         //delete and store new image
-        if(req.files){
+        // if(req.files){
 
-            //deleted 1st image
-            fs.unlink(`${uploadFolder}/${storedData.image}`, (err) => {
-              if(err){
-                throw Error('Image Not Deleted')
-              } else {
-                console.log('img deleted');
-              }
-            })
+        //     //deleted 1st image
+        //     fs.unlink(`${uploadFolder}/${storedData.image}`, (err) => {
+        //       if(err){
+        //         throw Error('Image Not Deleted')
+        //       } else {
+        //         console.log('img deleted');
+        //       }
+        //     })
 
-            //store new image
+        //     //store new image
 
-            //get files
-            const imageFile = req.files.image;
-            const UploadedFilName = imageFile.name;
+        //     //get files
+        //     const imageFile = req.files.image;
+        //     const UploadedFilName = imageFile.name;
 
-            const fileExt = path.extname(UploadedFilName);
-            const fileNameWithoutExt =
-            UploadedFilName
-                .replace(fileExt, "")
-                .toLowerCase()
-                .split(" ")
-                .join("-") +
-            "-" +
-            Date.now();
+        //     const fileExt = path.extname(UploadedFilName);
+        //     const fileNameWithoutExt =
+        //     UploadedFilName
+        //         .replace(fileExt, "")
+        //         .toLowerCase()
+        //         .split(" ")
+        //         .join("-") +
+        //     "-" +
+        //     Date.now();
 
-            finalFileName = fileNameWithoutExt + fileExt;
+        //     finalFileName = fileNameWithoutExt + fileExt;
 
-            const uploadPath = `${uploadFolder}/${finalFileName}`;
+        //     const uploadPath = `${uploadFolder}/${finalFileName}`;
 
-            imageFile.mv( uploadPath , (err) => {
-                if (err) {
-                    throw Error('File Not Uploaded')
-                }else {
-                    console.log('file uploaded');
-                }
-            })
+        //     imageFile.mv( uploadPath , (err) => {
+        //         if (err) {
+        //             throw Error('File Not Uploaded')
+        //         }else {
+        //             console.log('file uploaded');
+        //         }
+        //     })
 
-        }
+        // }
 
-        const uploadData = { ...req.body , image : finalFileName}
+        // const uploadData = { ...req.body , image : finalFileName}
 
 
         //update data
-        const data = await TaskImage.update( uploadData , { where : {id: id}})
+        // const data = await TaskImage.update( uploadData , { where : {id: id}})
         
         res.send({
           status: true,
           message: "Data Update Successfull",
-          data : data,
+          data : id,
           statusCode: 200
         })
 

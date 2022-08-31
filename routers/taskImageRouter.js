@@ -14,7 +14,7 @@ const{
 // add new data
 router.post('/' , checkLogin,  addData)
 //get all data
-router.get('/', getAllData)
+router.get('/all', getAllData)
 //get single data 
 router.get('/:id' , getDataByID)
 //update single data 

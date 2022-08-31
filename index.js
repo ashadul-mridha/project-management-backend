@@ -39,7 +39,7 @@ app.use('/api/setting' , settingRouter);
 
 //testing api
 app.get('/' , (req , res) => {
-    res.send({message : "Hello Web Agency Server"});
+    res.send({message : "Hello Todoest Server"});
 })
 
 
