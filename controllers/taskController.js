@@ -1,4 +1,5 @@
 const db = require('../models');
+const {genarateSlug} = require('../utilities/utilitiesFunction');
 
 //Import model
 const Task = db.task;
@@ -9,8 +10,16 @@ const Project = db.project;
 const addData = async (req,res) => {
     try {
 
+      // genarate slug
+      const slug = genarateSlug(req.body.name);
+
+        const data = {
+          ...req.body,
+          slug: slug,
+          status: req.body.status ? req.body.status : false
+        }
         //inset about us data
-        const newData = await Task.create(req.body);
+        const newData = await Task.create(data);
 
         res.send({
           status: true,

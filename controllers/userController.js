@@ -152,7 +152,7 @@ const registrationUser = async (req,res) => {
     
     res.send({
         status: false,
-        message: error.message,
+        message: error?.message,
         data : null,
         statusCode: 500
     })

@@ -9,10 +9,6 @@ module.exports = (sequelize , DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false
         },
-        slug: {
-            type: DataTypes.TEXT,
-            allowNull: false
-        },
         projectId: {
             type: DataTypes.INTEGER,
             allowNull: false

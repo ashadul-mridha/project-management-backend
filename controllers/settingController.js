@@ -45,7 +45,7 @@ const addSetting = async (req,res) => {
         let data = {
             ...req.body,
             image: finalFileName,
-            active: req.body.active ? req.body.active : false
+            status: req.body.status ? req.body.status : false
         }
 
         //inset about us data

@@ -9,7 +9,7 @@ const addData = async (req,res) => {
     try {
 
         let data = req.body.map( ( pjStatus) => {
-            return {...pjStatus, active: pjStatus.active ? pjStatus.active : false}
+            return {...pjStatus, status: pjStatus.status ? pjStatus.status : false}
         })
 
         //inset about us data

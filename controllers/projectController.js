@@ -2,6 +2,7 @@ const db = require('../models');
 const path = require("path");
 const fs = require("fs");
 const uploadFolder = path.join( __dirname , '/../public/images/uploads/project');
+const { genarateSlug } = require('../utilities/utilitiesFunction');
 
 //Import model
 const Project = db.project;
@@ -44,10 +45,14 @@ const addData = async (req,res) => {
 
       }
 
+      // genarate slug
+      const slug = genarateSlug(req.body.name);
+
         let data = {
             ...req.body,
+            slug: slug,
             image: finalFileName,
-            active: req.body.active ? req.body.active : false
+            status: req.body.status ? req.body.status : false
         }
 
         //inset about us data
