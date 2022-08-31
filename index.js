@@ -9,6 +9,7 @@ const userRouter = require('./routers/userRouter');
 const projectRouter = require('./routers/projectRouter');
 const projectStatusRouter = require('./routers/projectStatusRouter');
 const taskRouter = require('./routers/taskRouter');
+const taskImageRouter = require('./routers/taskImageRouter');
 const settingRouter = require('./routers/settingRouter');
 
 //import middleware
@@ -33,6 +34,7 @@ app.use('/api/user' , userRouter);
 app.use('/api/project' , projectRouter);
 app.use('/api/projectStatus' , projectStatusRouter);
 app.use('/api/task' , taskRouter);
+app.use('/api/task/image' , taskImageRouter);
 app.use('/api/setting' , settingRouter);
 
 //testing api

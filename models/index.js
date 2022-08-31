@@ -34,6 +34,7 @@ db.user = require('./userModel')(sequelize, DataTypes);
 db.project = require('./projectModel')(sequelize, DataTypes);
 db.projectStatus = require('./projectStatusModel')(sequelize, DataTypes);
 db.task = require('./taskModel')(sequelize, DataTypes);
+db.taskImage = require('./taskImageModel')(sequelize, DataTypes);
 db.setting = require('./settingModel')(sequelize, DataTypes);
 
 //database with model and create table
