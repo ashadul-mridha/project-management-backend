@@ -5,6 +5,7 @@ const {genarateSlug} = require('../utilities/utilitiesFunction');
 const Task = db.task;
 const ProjectStatus = db.projectStatus;
 const Project = db.project;
+const TaskImage = db.taskImage;
 
 //const add new hero section data
 const addData = async (req,res) => {
@@ -66,7 +67,9 @@ const getAllData = async (req, res) => {
 const getDataByID = async (req,res) => {
     try {
         const {id} = req.params;
-        const data = await Task.findOne({ where : {id: id}})
+        const data = await Task.findOne({ where : {id: id}, 
+          include:[{model: TaskImage}]
+        })
         res.send({
           status: true,
           message: "Data Get Successfull",
@@ -113,8 +116,11 @@ const updateDataByID = async (req,res) => {
     try {
         //update id
         const {id} = req.params;
+        
+      // genarate slug
+      const slug = genarateSlug(req.body.name);
 
-        const uploadData = { ...req.body }
+        const uploadData = { ...req.body, slug }
 
         //update data
         const data = await Task.update( uploadData , { where : {id: id}})
