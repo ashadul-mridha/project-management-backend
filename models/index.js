@@ -33,6 +33,7 @@ db.sequelize = sequelize;
 db.user = require('./userModel')(sequelize, DataTypes);
 db.project = require('./projectModel')(sequelize, DataTypes);
 db.projectStatus = require('./projectStatusModel')(sequelize, DataTypes);
+db.projectUser = require('./project_user')(sequelize, DataTypes);
 db.task = require('./taskModel')(sequelize, DataTypes);
 db.taskImage = require('./taskImageModel')(sequelize, DataTypes);
 db.setting = require('./settingModel')(sequelize, DataTypes);
@@ -69,7 +70,14 @@ db.task.belongsTo(db.project , {
 db.task.belongsTo(db.projectStatus , {
   foreignKey: 'statusId'
 })
-
 // many to many relation
+db.project.belongsToMany(db.user, {
+  through: "project_user",
+  foreignKey: "projectId",
+});
+db.user.belongsToMany(db.project, {
+  through: "project_user",
+  foreignKey: "userId",
+});
 
 module.exports = db;

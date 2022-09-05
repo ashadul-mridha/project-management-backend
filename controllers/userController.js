@@ -7,6 +7,7 @@ const uploadFolder = path.join( __dirname , '/../public/images/uploads/user');
 
 //Import model
 const User = db.user;
+const Project = db.project;
 
 //const add new hero section data
 const registrationUser = async (req,res) => {
@@ -157,11 +158,41 @@ const registrationUser = async (req,res) => {
   }
 }
 
-// get all user
 //get all data
 const getAllData = async (req, res) => {
     try {
-        const data = await User.findAll({});
+        const data = await User.findAll({
+          attributes: ['name', 'email', 'userRole','image'],
+        });
+
+        res.send({
+          status: true,
+          message: "Data Get Successfull",
+          data : data,
+          statusCode: 200
+        })
+
+    } catch (error) {
+        res.send({
+          status: false,
+          message: error.message,
+          data : null,
+          statusCode: 500
+        })
+    }
+}
+
+
+//get all data
+const getDataByID = async (req, res) => {
+    try {
+        const {id} = req.params;
+
+        const data = await User.findOne({
+          where : { id : id},
+          attributes: ['name', 'email', 'userRole','image'],
+          include:[{model: Project, attributes: ['name', 'slug','image'] }]
+        });
 
         res.send({
           status: true,
@@ -183,5 +214,6 @@ const getAllData = async (req, res) => {
 module.exports = {
     registrationUser,
     loginUser,
-    getAllData
+    getAllData,
+    getDataByID
 }

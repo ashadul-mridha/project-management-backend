@@ -5,7 +5,8 @@ const router = require('express').Router();
 const{
     registrationUser,
     loginUser,
-    getAllData
+    getAllData,
+    getDataByID
 } = require('../controllers/userController');
 
 //registration new user
@@ -14,5 +15,7 @@ router.post('/registration' , registrationUser)
 router.post('/login' , loginUser)
 //get all user
 router.get('/' , getAllData)
+//get user by if
+router.get('/:id' , getDataByID)
 
 module.exports = router;

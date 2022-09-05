@@ -78,7 +78,9 @@ const addData = async (req,res) => {
 //get all data
 const getAllData = async (req, res) => {
     try {
-        const data = await Project.findAll({});
+        const data = await Project.findAll({
+          attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+        });
 
         res.send({
           status: true,
@@ -103,7 +105,16 @@ const getDataByID = async (req,res) => {
     try {
         const {id} = req.params;
         const data = await Project.findOne({ where : {id: id}, 
-          include:[{model: ProjectStatus , include :{model: Task}}]
+          attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+          include:[{
+            model: ProjectStatus ,
+            attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+            include :{
+              model: Task,
+              attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+            }
+          }]
+
         })
         res.send({
           status: true,
