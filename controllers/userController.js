@@ -90,9 +90,7 @@ const registrationUser = async (req,res) => {
     }
 }
 
-
 //login user
-// login user
 
  const loginUser =  async (req, res) => {
 
@@ -159,8 +157,31 @@ const registrationUser = async (req,res) => {
   }
 }
 
+// get all user
+//get all data
+const getAllData = async (req, res) => {
+    try {
+        const data = await User.findAll({});
+
+        res.send({
+          status: true,
+          message: "Data Get Successfull",
+          data : data,
+          statusCode: 200
+        })
+
+    } catch (error) {
+        res.send({
+          status: false,
+          message: error.message,
+          data : null,
+          statusCode: 500
+        })
+    }
+}
 
 module.exports = {
     registrationUser,
-    loginUser
+    loginUser,
+    getAllData
 }
