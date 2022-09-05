@@ -162,7 +162,7 @@ const registrationUser = async (req,res) => {
 const getAllData = async (req, res) => {
     try {
         const data = await User.findAll({
-          attributes: ['name', 'email', 'userRole','image'],
+          attributes: ['id', 'name', 'email', 'userRole','image'],
         });
 
         res.send({

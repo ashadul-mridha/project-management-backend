@@ -4,6 +4,7 @@ const { checkLogin } = require('../middlewares/common/checkAuthorization');
 //import all controller 
 
 const{
+    addProjectAllData,
     addData,
     getAllData,
     getDataByID,
@@ -11,6 +12,8 @@ const{
     deleteDataById
 } = require('../controllers/projectController');
 
+// add new data
+router.post('/all', checkLogin, addProjectAllData)
 // add new data
 router.post('/' , addData)
 //get all data

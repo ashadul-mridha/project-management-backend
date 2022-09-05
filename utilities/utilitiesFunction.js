@@ -1,4 +1,5 @@
 
+const path = require("path");
 
 const genarateSlug = (name) => {
     const slug = name.toLowerCase().split(" ").join("-") + "-" + Date.now();
@@ -6,4 +7,19 @@ const genarateSlug = (name) => {
     return slug;
 }
 
-module.exports = { genarateSlug }
+const uploadFileName = (fileName) => {
+    const fileExt = path.extname(fileName);
+    const fileNameWithoutExt =
+    fileName
+        .replace(fileExt, "")
+        .toLowerCase()
+        .split(" ")
+        .join("-") +
+    "-" +
+    Date.now();
+
+    const finalFileName = fileNameWithoutExt + fileExt;
+    return finalFileName;
+}
+
+module.exports = { genarateSlug, uploadFileName }

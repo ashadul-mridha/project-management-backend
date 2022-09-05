@@ -2,14 +2,91 @@ const db = require('../models');
 const path = require("path");
 const fs = require("fs");
 const uploadFolder = path.join( __dirname , '/../public/images/uploads/project');
-const { genarateSlug } = require('../utilities/utilitiesFunction');
+const { genarateSlug, uploadFileName } = require('../utilities/utilitiesFunction');
 
 //Import model
 const Project = db.project;
 const ProjectStatus = db.projectStatus;
+const ProjectUser = db.projectUser;
 const Task = db.task;
 
-//const add new hero section data
+
+//const add new data
+const addProjectAllData = async (req,res) => {
+    try {
+
+      //assign users
+      const project_status = JSON.parse(req.body.project_status);
+      const assignUser = JSON.parse(req.body.assignUser);
+      const name = req.body.name ;
+
+      let finalFileName;
+
+      if (req.files) {
+
+          //get files
+          const imageFile = req.files.image;
+          const UploadedFilName = imageFile.name;
+
+          finalFileName = uploadFileName(UploadedFilName);
+
+          const uploadPath = `${uploadFolder}/${finalFileName}`;
+
+          imageFile.mv( uploadPath , (err) => {
+            if (err) {
+              throw Error('File Not Uploaded')
+            }
+          })
+
+      }
+
+      // genarate slug
+      const slug = genarateSlug(name);
+
+        let projectData = {
+            name,
+            slug: slug,
+            image: finalFileName,
+            status: req.body.status ? req.body.status : false
+        }
+        // add project
+        const projectRes = await Project.create(projectData);
+
+
+        //genarate status data
+        let projectStatusData = project_status.map( ( status) => {
+            return {...status, projectId: projectRes.id, status: status.status ? status.status : false}
+        })
+        //inset project status
+        const statusRes = await ProjectStatus.bulkCreate(projectStatusData);
+        
+
+        //genarate assign users
+        let projectuserData = assignUser.map( ( user) => {
+            return { userId : user.id , projectId: projectRes.id, createdBy : req.user.id }
+        })
+        //inset project status
+        const projectuserRes = await ProjectUser.bulkCreate(projectuserData);
+
+
+        res.send({
+          status: true,
+          message: "Project Data Added successfull",
+          data : projectRes,
+          statusCode: 200
+        })
+
+    } catch (error) {
+        res.send({
+          status: false,
+          message: error.message,
+          data : null,
+          statusCode: 500
+        }) 
+    }
+}
+
+//const add new data
 const addData = async (req,res) => {
     try {
 
@@ -234,6 +311,7 @@ const deleteDataById = async (req,res) => {
 }
 
 module.exports = {
+    addProjectAllData,
     addData,
     getAllData,
     getDataByID,
