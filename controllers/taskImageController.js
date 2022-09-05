@@ -10,9 +10,10 @@ const TaskImage = db.taskImage;
 const addData = async (req,res) => {
     try {
 
-        const uploadedFiles = [];
 
-        if(req.files){
+        if(req.files.image.length){
+
+            let uploadedFiles = [];
 
             const file = req.files.image;
 
@@ -31,34 +32,80 @@ const addData = async (req,res) => {
                     Date.now();
 
                 const finalFileName = fileNameWithoutExt + fileExt;
-
+                
                 uploadedFiles.push(finalFileName);
 
                 const uploadPath = `${uploadFolder}/${finalFileName}`;
+                
 
                 file[i].mv( uploadPath , (err) => {
                     if (err) {
                         throw Error('File Not Uploaded')
+                    } else {
                     }
                 })
 
             }
+
+            const insertData = uploadedFiles?.map( (file) => {
+                return { taskId : req.body.taskId, image : file, createdBy: req.user.id};
+            })
+
+            //inset images data
+            const newData = await TaskImage.bulkCreate(insertData);
+
+            res.send({
+                status: true,
+                message: "Upload Multiple Image Successfully",
+                data : newData,
+                insertData,
+                statusCode: 200
+            })
+        } else {
+
+            let finalFileName;
+
+            //get files
+            const imageFile = req.files.image;
+            const UploadedFilName = imageFile.name;
+
+            const fileExt = path.extname(UploadedFilName);
+            const fileNameWithoutExt =
+                UploadedFilName
+                .replace(fileExt, "")
+                .toLowerCase()
+                .split(" ")
+                .join("-") +
+                "-" +
+                Date.now();
+
+            finalFileName = fileNameWithoutExt + fileExt;
+
+            const uploadPath = `${uploadFolder}/${finalFileName}`;
+
+            imageFile.mv( uploadPath , (err) => {
+                if (err) {
+                throw Error('File Not Uploaded')
+                }
+            })
+
+            let data = {
+                taskId : req.body.taskId, image : finalFileName, createdBy: req.user.id
+            }
+
+            //inset about us data
+            const InsertData = await TaskImage.create(data);
+
+            res.send({
+                status: true,
+                message: "Data Added Successfull",
+                data : InsertData,
+                data,
+                statusCode: 200
+            })
         }
 
-        const insertData = uploadedFiles?.map( (file) => {
-            return { taskId : req.body.taskId, image : file, createdBy: req.user.id};
-        })
-
-        //inset images data
-        const newData = await TaskImage.bulkCreate(insertData);
-
-
-        res.send({
-            status: true,
-            message: "Data Added Successfull",
-            data : newData,
-            statusCode: 200
-        })
+        
 
 
     } catch (error) {
@@ -199,7 +246,7 @@ const deleteDataById = async (req,res) => {
         if(data.image){
             fs.unlink(`${uploadFolder}/${data.image}`, (err) => {
               if(err){
-                throw Error('Image Not Deleted')
+                throw new Error('Image Not Deleted')
               } else {
                 
               }

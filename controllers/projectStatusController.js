@@ -40,8 +40,6 @@ const getAllData = async (req, res) => {
                 model: Task
           }]
         });
-
-        console.log(req.user);
         
         res.send({
           status: true,

@@ -43,8 +43,6 @@ const addData = async (req,res) => {
 const getAllData = async (req, res) => {
     try {
         const data = await Task.findAll({});
-
-        console.log(req.user);
         
         res.send({
           status: true,

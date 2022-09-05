@@ -49,7 +49,6 @@ const registrationUser = async (req,res) => {
 
             const uploadPath = `${uploadFolder}/${finalFileName}`;
 
-            console.log(uploadPath);
 
             imageFile.mv( uploadPath , (err) => {
                 if (err) {

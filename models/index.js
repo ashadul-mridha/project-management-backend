@@ -66,9 +66,10 @@ db.task.hasMany(db.taskImage , {
 db.task.belongsTo(db.project , {
   foreignKey: 'projectId'
 })
-
 db.task.belongsTo(db.projectStatus , {
   foreignKey: 'statusId'
 })
+
+// many to many relation
 
 module.exports = db;
