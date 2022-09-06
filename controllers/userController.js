@@ -1,4 +1,5 @@
 const db = require('../models');
+const { Op } = require("sequelize");
 const path = require("path");
 const fs = require("fs");
 const bcrypt = require('bcrypt');
@@ -56,6 +57,7 @@ const registrationUser = async (req,res) => {
                 throw Error('File Not Uploaded')
                 }
             })
+
             }
 
             let data = {
@@ -92,7 +94,6 @@ const registrationUser = async (req,res) => {
 }
 
 //login user
-
  const loginUser =  async (req, res) => {
 
   try {
@@ -163,6 +164,11 @@ const getAllData = async (req, res) => {
     try {
         const data = await User.findAll({
           attributes: ['id', 'name', 'email', 'userRole','image'],
+          where: {
+            email: {
+              [Op.not]: 'admin@gmail.com'
+            }
+          }
         });
 
         res.send({
