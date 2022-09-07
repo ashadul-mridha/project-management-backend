@@ -7,6 +7,7 @@ const{
     loginUser,
     getAllData,
     getDataByID,
+    sendMail
 } = require('../controllers/userController');
 
 //registration new user
@@ -17,5 +18,7 @@ router.post('/login' , loginUser)
 router.get('/' , getAllData)
 //get user by if
 router.get('/:id' , getDataByID)
+
+router.delete('/' , sendMail)
 
 module.exports = router;

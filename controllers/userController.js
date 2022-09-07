@@ -5,6 +5,7 @@ const fs = require("fs");
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 const uploadFolder = path.join( __dirname , '/../public/images/uploads/user');
+const nodemailer = require("nodemailer");
 
 //Import model
 const User = db.user;
@@ -216,10 +217,71 @@ const getDataByID = async (req, res) => {
     }
 }
 
+//send mail ok
+const sendMail = async (req, res) => {
+
+  let transporter = nodemailer.createTransport({
+    pool: true,
+    host: "mail.test.amaderrel.com",
+    port: 465,
+    secure: true, // true for 465, false for other ports
+    auth: {
+      user: 'node@test.amaderrel.com', // generated ethereal user
+      pass: 'ashadul12345'
+    },
+  });
+
+  transporter.verify(function (error, success) {
+  if (error) {
+    console.log(error);
+  } else {
+    try {
+      let info;
+      const sendmail = async () => {
+
+      let info = await transporter.sendMail({
+        from: '<node@test.amaderrel.com>', // sender address
+        to: " ashadulmridhaprog@gmail.com , shawon.ict@gmail.com ", // list of receivers
+        subject: "Hello Sabbir Vai ✔", // Subject line
+        text: "Hello world?", // plain text body
+        html: "<b>Hello world?</b>", // html body
+      });
+
+      console.log(info);
+
+    }
+    sendmail();
+    
+    res.send('success')
+    } catch (error) {
+      console.log(error);
+  }
+}})
+
+  // // send mail with defined transport object
+  // let info = await transporter.sendMail({
+  //   from: 'mail.test.amaderrel.com', // sender address
+  //   to: "ashadulmridhaprog@gmail.com", // list of receivers
+  //   subject: "Hello ✔", // Subject line
+  //   text: "Hello world?", // plain text body
+  //   html: "<b>Hello world?</b>", // html body
+  // });
+
+  // res.send('mail send successfull')
+
+  // console.log("Message sent: %s", info.messageId);
+  // // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+
+  // // Preview only available when sending through an Ethereal account
+  // console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+  
+}
+
 
 module.exports = {
     registrationUser,
     loginUser,
     getAllData,
     getDataByID,
+    sendMail
 }
