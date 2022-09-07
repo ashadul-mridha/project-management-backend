@@ -48,15 +48,9 @@ module.exports = (sequelize , DataTypes) => {
         status: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
-        },
-        deletedAt: {
-            type: DataTypes.DATE,
-            allowNull: true,
         }
-        // isComplete: {
-        //     type: DataTypes.ENUM(true, false),
-        //     defaultValue: false,
-        // }
+    },{
+        paranoid: true
     })
 
     return Task;

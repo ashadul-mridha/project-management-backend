@@ -24,11 +24,9 @@ module.exports = (sequelize , DataTypes) => {
         deletedBy: {
             type: DataTypes.INTEGER,
             allowNull: true,
-        },
-        deletedAt: {
-            type: DataTypes.DATE,
-            allowNull: true,
         }
+    },{
+        paranoid: true
     })
 
     return ProjectUser;

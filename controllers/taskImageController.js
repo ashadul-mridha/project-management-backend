@@ -252,7 +252,7 @@ const deleteDataById = async (req,res) => {
               }
             })
         }
-        await TaskImage.destroy({ where : {id: id}})
+        await TaskImage.destroy({ where : {id: id},force: true})
         res.send({
           status: true,
           message: "Image Delete Successfull",

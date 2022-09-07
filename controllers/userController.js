@@ -66,7 +66,6 @@ const registrationUser = async (req,res) => {
                 password : hashedPassword,
                 userRole : req.body.userRole ? req.body.userRole : 'user',
                 image: finalFileName,
-                isDeleted: false,
                 active: req.body.active ? req.body.active : false
             }
 
@@ -217,9 +216,10 @@ const getDataByID = async (req, res) => {
     }
 }
 
+
 module.exports = {
     registrationUser,
     loginUser,
     getAllData,
-    getDataByID
+    getDataByID,
 }

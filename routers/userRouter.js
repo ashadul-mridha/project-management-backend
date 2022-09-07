@@ -6,7 +6,7 @@ const{
     registrationUser,
     loginUser,
     getAllData,
-    getDataByID
+    getDataByID,
 } = require('../controllers/userController');
 
 //registration new user

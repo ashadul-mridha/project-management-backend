@@ -30,10 +30,6 @@ module.exports = (sequelize , DataTypes) => {
             allowNull: false,
             unique: true
         },
-        isDeleted: {
-            type: DataTypes.BOOLEAN,
-            allowNull: false,
-        },
         active: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
@@ -49,11 +45,9 @@ module.exports = (sequelize , DataTypes) => {
         deletedBy: {
             type: DataTypes.INTEGER,
             allowNull: true,
-        },
-        deletedAt: {
-            type: DataTypes.DATE,
-            allowNull: true,
         }
+    },{
+        paranoid: true
     })
 
     return User;

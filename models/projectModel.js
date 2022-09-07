@@ -32,11 +32,9 @@ module.exports = (sequelize , DataTypes) => {
         status: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
-        },
-        deletedAt: {
-            type: DataTypes.DATE,
-            allowNull: true,
         }
+    },{
+        paranoid: true
     })
 
     return Project;

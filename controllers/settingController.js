@@ -200,7 +200,7 @@ const deleteDataById = async (req,res) => {
               }
             })
         }
-        await Setting.destroy({ where : {id: id}})
+        await Setting.destroy({ where : {id: id},force: true})
         res.status(200).send('About Us Delete Successfully');
     } catch (error) {
         res.send({
