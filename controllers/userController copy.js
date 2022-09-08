@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 const uploadFolder = path.join( __dirname , '/../public/images/uploads/user');
 const nodemailer = require("nodemailer");
+const smtpConfig = require("../config/smtpConfig");
 
 //Import model
 const User = db.user;
@@ -220,60 +221,69 @@ const getDataByID = async (req, res) => {
 //send mail ok
 const sendMail = async (req, res) => {
 
+  
   let transporter = nodemailer.createTransport({
-    pool: true,
-    host: "mail.test.amaderrel.com",
-    port: 465,
-    secure: true, // true for 465, false for other ports
+    pool: smtpConfig.pool,
+    host: smtpConfig.host,
+    port: smtpConfig.port,
+    secure: smtpConfig.secure,
     auth: {
-      user: 'node@test.amaderrel.com', // generated ethereal user
-      pass: 'ashadul12345'
+      user: smtpConfig.auth.user, 
+      pass: smtpConfig.auth.pass
     },
   });
 
+
   transporter.verify(function (error, success) {
   if (error) {
-    console.log(error);
+    res.send({
+      status: false,
+      message: error.message,
+      data : null,
+      statusCode: 500
+    })
   } else {
+
     try {
-      let info;
+
       const sendmail = async () => {
 
-      let info = await transporter.sendMail({
-        from: '<node@test.amaderrel.com>', // sender address
-        to: " ashadulmridhaprog@gmail.com , shawon.ict@gmail.com, parag.ict53@gmail.com ", // list of receivers
-        subject: "Hello Sabbir Vai ✔", // Subject line
-        text: "Hello world?", // plain text body
-        html: "<b>Hello world?</b>", // html body
-      });
+        let info = await transporter.sendMail({
+          from: '<node@test.amaderrel.com>',
+          to: " ashadulmridhaprog@gmail.com",
+          text: 'For clients with plaintext support only',
+          html: '<p>For clients that do not support AMP4EMAIL or amp content is not valid</p>',
+          amp: `<!doctype html>
+          <html ⚡4email>
+            <head>
+              <meta charset="utf-8">
+              <style amp4email-boilerplate>body{visibility:hidden}</style>
+              <script async src="https://cdn.ampproject.org/v0.js"></script>
+              <script async custom-element="amp-anim" src="https://cdn.ampproject.org/v0/amp-anim-0.1.js"></script>
+            </head>
+            <body>
+              <p>Image: <amp-img src="https://cldup.com/P0b1bUmEet.png" width="16" height="16"/></p>
+              <p>GIF (requires "amp-anim" script in header):<br/>
+                <amp-anim src="https://cldup.com/D72zpdwI-i.gif" width="500" height="350"/></p>
+            </body>
+          </html>`
+        });
 
-      console.log(info);
+        console.log(info);
 
-    }
+      }
     sendmail();
     
-    res.send('success send email')
+    res.send('success')
     } catch (error) {
-      console.log(error);
-  }
+      res.send({
+        status: false,
+        message: error.message,
+        data : null,
+        statusCode: 500
+      })
+    }
 }})
-
-  // // send mail with defined transport object
-  // let info = await transporter.sendMail({
-  //   from: 'mail.test.amaderrel.com', // sender address
-  //   to: "ashadulmridhaprog@gmail.com", // list of receivers
-  //   subject: "Hello ✔", // Subject line
-  //   text: "Hello world?", // plain text body
-  //   html: "<b>Hello world?</b>", // html body
-  // });
-
-  // res.send('mail send successfull')
-
-  // console.log("Message sent: %s", info.messageId);
-  // // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-
-  // // Preview only available when sending through an Ethereal account
-  // console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
   
 }
 
