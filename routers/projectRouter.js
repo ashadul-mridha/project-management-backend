@@ -7,6 +7,7 @@ const{
     addProjectAllData,
     addData,
     getAllData,
+    getAllDataByUser,
     getDataByID,
     updateDataByID,
     deleteDataById
@@ -18,6 +19,8 @@ router.post('/all', checkLogin, addProjectAllData)
 router.post('/' , addData)
 //get all data
 router.get('/', checkLogin , getAllData)
+//get all data by user
+router.get('/user', checkLogin , getAllDataByUser)
 //get single data 
 router.get('/:id' , getDataByID)
 //update single data 

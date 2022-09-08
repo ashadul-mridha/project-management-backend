@@ -157,6 +157,47 @@ const getAllData = async (req, res) => {
     try {
         const data = await Project.findAll({
           attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+          include:[{
+            model: ProjectStatus ,
+            attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+            include :{
+              model: Task,
+              attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+            }
+          }]
+        });
+
+        res.send({
+          status: true,
+          message: "Data Get Successfull",
+          data : data,
+          statusCode: 200
+        })
+
+    } catch (error) {
+        res.send({
+          status: false,
+          message: error.message,
+          data : null,
+          statusCode: 500
+        })
+    }
+}
+
+//get all data by user
+const getAllDataByUser = async (req, res) => {
+    try {
+        const data = await Project.findAll({
+          where : {id : req.user.id},
+          attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+          include:[{
+            model: ProjectStatus ,
+            attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+            include :{
+              model: Task,
+              attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+            }
+          }]
         });
 
         res.send({
@@ -314,6 +355,7 @@ module.exports = {
     addProjectAllData,
     addData,
     getAllData,
+    getAllDataByUser,
     getDataByID,
     updateDataByID,
     deleteDataById
