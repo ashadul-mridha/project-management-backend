@@ -35,6 +35,7 @@ db.project = require('./projectModel')(sequelize, DataTypes);
 db.projectStatus = require('./projectStatusModel')(sequelize, DataTypes);
 db.projectUser = require('./project_user')(sequelize, DataTypes);
 db.task = require('./taskModel')(sequelize, DataTypes);
+db.taskUser = require('./taskModel')(sequelize, DataTypes);
 db.taskImage = require('./taskImageModel')(sequelize, DataTypes);
 db.setting = require('./settingModel')(sequelize, DataTypes);
 

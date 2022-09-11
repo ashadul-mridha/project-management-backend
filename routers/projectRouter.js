@@ -9,6 +9,7 @@ const{
     getAllData,
     getAllDataByUser,
     getDataByID,
+    getDataBySlug,
     updateDataByID,
     deleteDataById
 } = require('../controllers/projectController');
@@ -21,8 +22,10 @@ router.post('/' , addData)
 router.get('/', checkLogin , getAllData)
 //get all data by user
 router.get('/user', checkLogin , getAllDataByUser)
-//get single data 
+//get single data by id
 router.get('/:id' , getDataByID)
+//get single data by slug
+router.get('/slug/:slug' , getDataBySlug)
 //update single data 
 router.put('/:id' , checkLogin , updateDataByID)
 //delete single data 

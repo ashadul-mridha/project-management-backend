@@ -219,6 +219,7 @@ const getDataByID = async (req, res) => {
 
 //send mail ok
 const sendMail = async (req, res) => {
+  
 
   let transporter = nodemailer.createTransport({
     pool: true,
@@ -226,7 +227,7 @@ const sendMail = async (req, res) => {
     port: 465,
     secure: true, // true for 465, false for other ports
     auth: {
-      user: 'node@test.amaderrel.com', // generated ethereal user
+      user: 'todoest@test.amaderrel.com', // generated ethereal user
       pass: 'ashadul12345'
     },
   });
@@ -236,13 +237,13 @@ const sendMail = async (req, res) => {
     console.log(error);
   } else {
     try {
-      let info;
+      
       const sendmail = async () => {
 
       let info = await transporter.sendMail({
-        from: '<node@test.amaderrel.com>', // sender address
-        to: " ashadulmridhaprog@gmail.com , shawon.ict@gmail.com, parag.ict53@gmail.com ", // list of receivers
-        subject: "Hello Sabbir Vai ✔", // Subject line
+        from: '<todoest@test.amaderrel.com>', // sender address
+        to: "parag@decode-lab.com, ashadulmridhaprog@gmail.com", // list of receivers
+        subject: "Hello Porag Vai ✔", // Subject line
         text: "Hello world?", // plain text body
         html: "<b>Hello world?</b>", // html body
       });

@@ -218,7 +218,7 @@ const getAllDataByUser = async (req, res) => {
 }
 
 
-//get single data
+//get single data by id
 const getDataByID = async (req,res) => {
     try {
         const {id} = req.params;
@@ -249,6 +249,41 @@ const getDataByID = async (req,res) => {
         }) 
     }
 }
+
+
+//get single data
+const getDataBySlug = async (req,res) => {
+    try {
+        const {slug} = req.params;
+        const data = await Project.findOne({ where : {slug: slug}, 
+          attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+          include:[{
+            model: ProjectStatus ,
+            attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+            include :{
+              model: Task,
+              attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+            }
+          }]
+
+        })
+        res.send({
+          status: true,
+          message: "Data Get Successfull",
+          data : data,
+          statusCode: 200
+        })
+    } catch (error) {
+        res.send({
+          status: false,
+          message: error.message,
+          data : null,
+          statusCode: 500
+        }) 
+    }
+}
+
+
 
 
 //Update single data by using id
@@ -357,6 +392,7 @@ module.exports = {
     getAllData,
     getAllDataByUser,
     getDataByID,
+    getDataBySlug,
     updateDataByID,
     deleteDataById
 }
