@@ -15,7 +15,7 @@ module.exports = (sequelize , DataTypes) => {
         },
         desc: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: true
         },
         projectId: {
             type: DataTypes.INTEGER,
@@ -31,7 +31,7 @@ module.exports = (sequelize , DataTypes) => {
         },
         remain: {
             type: DataTypes.DATE,
-            allowNull: true
+            allowNull: false
         },
         createdBy: {
             type: DataTypes.INTEGER,
