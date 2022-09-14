@@ -1,5 +1,8 @@
 const db = require('../models');
-const {genarateSlug} = require('../utilities/utilitiesFunction');
+const path = require("path");
+const fs = require("fs");
+const uploadFolder = path.join( __dirname , '/../public/images/uploads/task');
+const {genarateSlug, uploadFileName} = require('../utilities/utilitiesFunction');
 
 //Import model
 const Task = db.task;
@@ -18,7 +21,7 @@ const addTaskAndImage = async (req,res) => {
       const slug = genarateSlug(req.body.name);
 
       // upload image to server
-      
+
 
         // task insert data
         const taskData = {
@@ -43,12 +46,86 @@ const addTaskAndImage = async (req,res) => {
         // insert task user to task_user table
         const taskUserRes = await TaskUser.bulkCreate(taskUserData);
 
-        res.send({
-          status: true,
-          message: "Task Added Successfull",
-          data : taskUserRes,
-          statusCode: 200
-        })
+        
+        if(req.files.image.length){
+
+            let uploadedFiles = [];
+
+            const file = req.files.image;
+
+            for(let i = 0 ; i < file.length; i++){
+
+                const UploadedFilName = file[i].name;
+
+                const finalFileName = uploadFileName(UploadedFilName);
+                
+                uploadedFiles.push(finalFileName);
+
+                const uploadPath = `${uploadFolder}/${finalFileName}`;
+                
+
+                file[i].mv( uploadPath , (err) => {
+                    if (err) {
+                        throw Error('File Not Uploaded')
+                    } else {
+                    }
+                })
+
+            }
+
+            const insertData = uploadedFiles?.map( (file) => {
+                return { taskId : newTask.id, image : file, createdBy: req.user.id};
+            })
+
+            //inset images data
+            const newData = await TaskImage.bulkCreate(insertData);
+
+            res.send({
+                status: true,
+                message: "Upload Multiple Image Successfully",
+                data : newData,
+                statusCode: 200
+            })
+        } else {
+
+            let finalFileName;
+
+            //get files
+            const imageFile = req.files.image;
+            const UploadedFilName = imageFile.name;
+
+            finalFileName = uploadFileName(UploadedFilName);
+
+            const uploadPath = `${uploadFolder}/${finalFileName}`;
+
+            imageFile.mv( uploadPath , (err) => {
+                if (err) {
+                throw Error('File Not Uploaded')
+                }
+            })
+
+            let data = {
+                taskId : newTask.id, image : finalFileName, createdBy: req.user.id
+            }
+
+            //inset about us data
+            const InsertData = await TaskImage.create(data);
+
+            res.send({
+                status: true,
+                message: "All Data Added Successfull",
+                data : InsertData,
+                data,
+                statusCode: 200
+            })
+        }
+
+        // res.send({
+        //   status: true,
+        //   message: "Task Added Successfull",
+        //   data : taskUserRes,
+        //   statusCode: 200
+        // })
 
     } catch (error) {
         res.send({
