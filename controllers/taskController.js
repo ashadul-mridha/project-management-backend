@@ -49,8 +49,8 @@ const addTaskAndImage = async (req,res) => {
         
         if(req.files.image.length){
 
+          // store upload file name in array
             let uploadedFiles = [];
-
             const file = req.files.image;
 
             for(let i = 0 ; i < file.length; i++){
@@ -78,14 +78,8 @@ const addTaskAndImage = async (req,res) => {
             })
 
             //inset images data
-            const newData = await TaskImage.bulkCreate(insertData);
+            const taskMultiImage = await TaskImage.bulkCreate(insertData);
 
-            res.send({
-                status: true,
-                message: "Upload Multiple Image Successfully",
-                data : newData,
-                statusCode: 200
-            })
         } else {
 
             let finalFileName;
@@ -108,24 +102,16 @@ const addTaskAndImage = async (req,res) => {
                 taskId : newTask.id, image : finalFileName, createdBy: req.user.id
             }
 
-            //inset about us data
-            const InsertData = await TaskImage.create(data);
+            //inset task image
+            const taskImage = await TaskImage.create(data);
 
-            res.send({
-                status: true,
-                message: "All Data Added Successfull",
-                data : InsertData,
-                data,
-                statusCode: 200
-            })
         }
 
-        // res.send({
-        //   status: true,
-        //   message: "Task Added Successfull",
-        //   data : taskUserRes,
-        //   statusCode: 200
-        // })
+        res.send({
+          status: true,
+          message: "Task Added Successfull",
+          statusCode: 200
+        })
 
     } catch (error) {
         res.send({
