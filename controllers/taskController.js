@@ -6,7 +6,7 @@ const {genarateSlug, uploadFileName} = require('../utilities/utilitiesFunction')
 
 //Import model
 const Task = db.task;
-const TaskUser = db.taskUser;
+const User = db.user;
 const TaskImage = db.taskImage;
 const ProjectStatus = db.projectStatus;
 const Project = db.project;
@@ -158,7 +158,13 @@ const addData = async (req,res) => {
 //get all data
 const getAllData = async (req, res) => {
     try {
-        const data = await Task.findAll({});
+        const data = await Task.findAll({
+          attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+          include: [{
+            model: User,
+            attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+          }]
+        });
         
         res.send({
           status: true,
@@ -182,7 +188,7 @@ const getDataByID = async (req,res) => {
     try {
         const {id} = req.params;
         const data = await Task.findOne({ where : {id: id}, 
-          include:[{model: TaskImage}]
+          include:[{model: TaskImage}, {model: User}]
         })
         res.send({
           status: true,

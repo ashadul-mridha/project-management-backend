@@ -10,6 +10,8 @@ const nodemailer = require("nodemailer");
 //Import model
 const User = db.user;
 const Project = db.project;
+const Task = db.task;
+const TaskImage = db.taskImage;
 
 //const add new hero section data
 const registrationUser = async (req,res) => {
@@ -151,7 +153,7 @@ const registrationUser = async (req,res) => {
     
     res.send({
         status: false,
-        message: error?.message,
+        message: err?.message,
         data : null,
         statusCode: 500
     })
@@ -189,7 +191,7 @@ const getAllData = async (req, res) => {
 }
 
 
-//get all data
+//get user by id include project
 const getDataByID = async (req, res) => {
     try {
         const {id} = req.params;
@@ -198,6 +200,49 @@ const getDataByID = async (req, res) => {
           where : { id : id},
           attributes: ['id' ,'name', 'email', 'userRole','image'],
           include:[{model: Project, attributes: [ 'id','name', 'slug','image'] }]
+        });
+
+        res.send({
+          status: true,
+          message: "Data Get Successfull",
+          data : data,
+          statusCode: 200
+        })
+
+    } catch (error) {
+        res.send({
+          status: false,
+          message: error.message,
+          data : null,
+          statusCode: 500
+        })
+    }
+}
+
+//get all task by user id
+const getTaskByID = async (req, res) => {
+    try {
+        // const {id} = req.params;
+
+        const data = await User.findOne({
+          where : { id : req.user.id},
+          attributes: ['id' ,'name', 'email', 'userRole','image'],
+          include:[{
+            model: Task, 
+            attributes: {
+              include: [ 'id','name', 'slug','desc', 'priority', 'remain']
+            } , 
+            include :[
+              {
+                model: TaskImage,
+                attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+              },
+              {
+                  model: User,
+                  attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+              }
+            ] 
+          }]
         });
 
         res.send({
@@ -267,5 +312,6 @@ module.exports = {
     loginUser,
     getAllData,
     getDataByID,
+    getTaskByID,
     sendMail
 }

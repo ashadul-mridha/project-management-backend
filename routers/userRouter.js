@@ -7,8 +7,10 @@ const{
     loginUser,
     getAllData,
     getDataByID,
+    getTaskByID,
     sendMail
 } = require('../controllers/userController');
+const { checkLogin } = require('../middlewares/common/checkAuthorization');
 
 //registration new user
 router.post('/registration' , registrationUser)
@@ -16,6 +18,8 @@ router.post('/registration' , registrationUser)
 router.post('/login' , loginUser)
 //get all user
 router.get('/' , getAllData)
+//get all task by user
+router.get('/task', checkLogin , getTaskByID)
 //get user by if
 router.get('/:id' , getDataByID)
 

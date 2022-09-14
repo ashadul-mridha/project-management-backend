@@ -80,5 +80,13 @@ db.user.belongsToMany(db.project, {
   through: "project_user",
   foreignKey: "userId",
 });
+db.task.belongsToMany(db.user, {
+  through: "task_user",
+  foreignKey: "taskId",
+});
+db.user.belongsToMany(db.task, {
+  through: "task_user",
+  foreignKey: "userId",
+});
 
 module.exports = db;
