@@ -7,7 +7,8 @@ const{
     loginUser,
     getAllData,
     getDataByID,
-    getTaskByID,
+    getProjectByUserID,
+    getTaskByUserID,
     sendMail
 } = require('../controllers/userController');
 const { checkLogin } = require('../middlewares/common/checkAuthorization');
@@ -18,8 +19,10 @@ router.post('/registration' , registrationUser)
 router.post('/login' , loginUser)
 //get all user
 router.get('/' , getAllData)
+//get all project by user
+router.get('/project', checkLogin , getProjectByUserID)
 //get all task by user
-router.get('/task', checkLogin , getTaskByID)
+router.get('/task', checkLogin , getTaskByUserID)
 //get user by if
 router.get('/:id' , getDataByID)
 

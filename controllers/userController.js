@@ -10,8 +10,10 @@ const nodemailer = require("nodemailer");
 //Import model
 const User = db.user;
 const Project = db.project;
+const ProjectStatus = db.projectStatus;
 const Task = db.task;
 const TaskImage = db.taskImage;
+const TaskUser = db.taskUser;
 
 //const add new hero section data
 const registrationUser = async (req,res) => {
@@ -190,7 +192,6 @@ const getAllData = async (req, res) => {
     }
 }
 
-
 //get user by id include project
 const getDataByID = async (req, res) => {
     try {
@@ -199,7 +200,6 @@ const getDataByID = async (req, res) => {
         const data = await User.findOne({
           where : { id : id},
           attributes: ['id' ,'name', 'email', 'userRole','image'],
-          include:[{model: Project, attributes: [ 'id','name', 'slug','image'] }]
         });
 
         res.send({
@@ -219,8 +219,50 @@ const getDataByID = async (req, res) => {
     }
 }
 
-//get all task by user id
-const getTaskByID = async (req, res) => {
+
+//get user by id include project
+const getProjectByUserID = async (req, res) => {
+    try {
+
+        const data = await User.findOne({
+          where : { id : req.user.id},
+          attributes: ['id' ,'name', 'email', 'userRole','image'],
+          include:[
+            {
+              model: Project, 
+              attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']}, 
+              include:[{
+                model: ProjectStatus ,
+                attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+                include :{
+                  model: Task,
+                  // where: {userId : req.user.id},
+                  attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+                }
+              }]
+            }
+          ]
+        });
+
+        res.send({
+          status: true,
+          message: "Data Get Successfull",
+          data : data,
+          statusCode: 200
+        })
+
+    } catch (error) {
+        res.send({
+          status: false,
+          message: error.message,
+          data : null,
+          statusCode: 500
+        })
+    }
+}
+
+//get tasks by user id
+const getTaskByUserID = async (req, res) => {
     try {
         // const {id} = req.params;
 
@@ -312,6 +354,7 @@ module.exports = {
     loginUser,
     getAllData,
     getDataByID,
-    getTaskByID,
+    getProjectByUserID,
+    getTaskByUserID,
     sendMail
 }

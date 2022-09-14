@@ -7,6 +7,7 @@ const {genarateSlug, uploadFileName} = require('../utilities/utilitiesFunction')
 //Import model
 const Task = db.task;
 const User = db.user;
+const TaskUser = db.taskUser;
 const TaskImage = db.taskImage;
 const ProjectStatus = db.projectStatus;
 const Project = db.project;
@@ -47,64 +48,66 @@ const addTaskAndImage = async (req,res) => {
         const taskUserRes = await TaskUser.bulkCreate(taskUserData);
 
         
-        if(req.files.image.length){
+        if(req.files){
+          if(req.files.image.length){
 
-          // store upload file name in array
-            let uploadedFiles = [];
-            const file = req.files.image;
+            // store upload file name in array
+              let uploadedFiles = [];
+              const file = req.files.image;
 
-            for(let i = 0 ; i < file.length; i++){
+              for(let i = 0 ; i < file.length; i++){
 
-                const UploadedFilName = file[i].name;
+                  const UploadedFilName = file[i].name;
 
-                const finalFileName = uploadFileName(UploadedFilName);
-                
-                uploadedFiles.push(finalFileName);
+                  const finalFileName = uploadFileName(UploadedFilName);
+                  
+                  uploadedFiles.push(finalFileName);
 
-                const uploadPath = `${uploadFolder}/${finalFileName}`;
-                
+                  const uploadPath = `${uploadFolder}/${finalFileName}`;
+                  
 
-                file[i].mv( uploadPath , (err) => {
-                    if (err) {
-                        throw Error('File Not Uploaded')
-                    } else {
-                    }
-                })
+                  file[i].mv( uploadPath , (err) => {
+                      if (err) {
+                          throw Error('File Not Uploaded')
+                      } else {
+                      }
+                  })
 
-            }
+              }
 
-            const insertData = uploadedFiles?.map( (file) => {
-                return { taskId : newTask.id, image : file, createdBy: req.user.id};
-            })
+              const insertData = uploadedFiles?.map( (file) => {
+                  return { taskId : newTask.id, image : file, createdBy: req.user.id};
+              })
 
-            //inset images data
-            const taskMultiImage = await TaskImage.bulkCreate(insertData);
+              //inset images data
+              const taskMultiImage = await TaskImage.bulkCreate(insertData);
 
-        } else {
+          } else {
 
-            let finalFileName;
+              let finalFileName;
 
-            //get files
-            const imageFile = req.files.image;
-            const UploadedFilName = imageFile.name;
+              //get files
+              const imageFile = req.files.image;
+              const UploadedFilName = imageFile.name;
 
-            finalFileName = uploadFileName(UploadedFilName);
+              finalFileName = uploadFileName(UploadedFilName);
 
-            const uploadPath = `${uploadFolder}/${finalFileName}`;
+              const uploadPath = `${uploadFolder}/${finalFileName}`;
 
-            imageFile.mv( uploadPath , (err) => {
-                if (err) {
-                throw Error('File Not Uploaded')
-                }
-            })
+              imageFile.mv( uploadPath , (err) => {
+                  if (err) {
+                  throw Error('File Not Uploaded')
+                  }
+              })
 
-            let data = {
-                taskId : newTask.id, image : finalFileName, createdBy: req.user.id
-            }
+              let data = {
+                  taskId : newTask.id, image : finalFileName, createdBy: req.user.id
+              }
 
-            //inset task image
-            const taskImage = await TaskImage.create(data);
+              //inset task image
+              const taskImage = await TaskImage.create(data);
 
+          }
         }
 
         res.send({
