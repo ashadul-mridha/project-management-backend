@@ -4,6 +4,7 @@ const { checkLogin } = require('../middlewares/common/checkAuthorization');
 //import all controller 
 
 const{
+    addTaskAndImage,
     addData,
     getAllData,
     getDataByID,
@@ -12,6 +13,8 @@ const{
     deleteDataById
 } = require('../controllers/taskController');
 
+// add new data
+router.post('/imageUser', checkLogin , addTaskAndImage)
 // add new data
 router.post('/' , addData)
 //get all data
