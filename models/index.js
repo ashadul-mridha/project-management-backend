@@ -63,6 +63,9 @@ db.projectStatus.hasMany(db.task , {
 db.task.hasMany(db.taskImage , {
   foreignKey: 'taskId'
 })
+db.task.hasMany(db.taskUser , {
+  foreignKey: 'taskId'
+})
 
 // many to one relation
 db.task.belongsTo(db.project , {

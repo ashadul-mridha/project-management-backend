@@ -234,11 +234,11 @@ const getProjectByUserID = async (req, res) => {
               include:[{
                 model: ProjectStatus ,
                 attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
-                include :{
+                include : [{
                   model: Task,
-                  // where: {userId : req.user.id},
                   attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
-                }
+                  
+                }]
               }]
             }
           ]
@@ -271,6 +271,104 @@ const getTaskByUserID = async (req, res) => {
           attributes: ['id' ,'name', 'email', 'userRole','image'],
           include:[{
             model: Task, 
+            attributes: {
+              include: [ 'id','name', 'slug','desc', 'priority', 'remain']
+            } , 
+            include :[
+              {
+                model: TaskImage,
+                attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+              },
+              {
+                  model: User,
+                  attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+              }
+            ] 
+          }]
+        });
+
+        res.send({
+          status: true,
+          message: "Data Get Successfull",
+          data : data,
+          statusCode: 200
+        })
+
+    } catch (error) {
+        res.send({
+          status: false,
+          message: error.message,
+          data : null,
+          statusCode: 500
+        })
+    }
+}
+
+
+//get today tasks by user id
+const getTodayTaskByUserID = async (req, res) => {
+    try {
+        // const {id} = req.params;
+
+        const data = await User.findOne({
+          where : { id : req.user.id},
+          attributes: ['id' ,'name', 'email', 'userRole','image'],
+          include:[{
+            model: Task, 
+            where : {
+              remain : {
+                [Op.lt]: new Date(),
+                [Op.gt]: new Date(new Date() - 24 * 60 * 60 * 1000)
+              }
+            },
+            attributes: {
+              include: [ 'id','name', 'slug','desc', 'priority', 'remain']
+            } , 
+            include :[
+              {
+                model: TaskImage,
+                attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+              },
+              {
+                  model: User,
+                  attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+              }
+            ] 
+          }]
+        });
+
+        res.send({
+          status: true,
+          message: "Data Get Successfull",
+          data : data,
+          statusCode: 200
+        })
+
+    } catch (error) {
+        res.send({
+          status: false,
+          message: error.message,
+          data : null,
+          statusCode: 500
+        })
+    }
+}
+
+//get today tasks by user id
+const getUpcommingTaskByUserID = async (req, res) => {
+    try {
+        // const {id} = req.params;
+
+        const data = await User.findOne({
+          where : { id : req.user.id},
+          attributes: ['id' ,'name', 'email', 'userRole','image'],
+          include:[{
+            model: Task, 
+            where : {
+              remain : {
+                [Op.gt]: new Date()
+              }
+            },
             attributes: {
               include: [ 'id','name', 'slug','desc', 'priority', 'remain']
             } , 
@@ -356,5 +454,7 @@ module.exports = {
     getDataByID,
     getProjectByUserID,
     getTaskByUserID,
+    getTodayTaskByUserID,
+    getUpcommingTaskByUserID,
     sendMail
 }

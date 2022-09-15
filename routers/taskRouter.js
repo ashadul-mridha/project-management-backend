@@ -7,6 +7,8 @@ const{
     addTaskAndImage,
     addData,
     getAllData,
+    getUpcommingAllTask,
+    getTodayAllTask,
     getDataByID,
     getDataByProjectID,
     updateDataByID,
@@ -19,6 +21,10 @@ router.post('/imageUser', checkLogin , addTaskAndImage)
 router.post('/' , addData)
 //get all data
 router.get('/', checkLogin , getAllData)
+//get all upcomming Data
+router.get('/upcomming', checkLogin , getUpcommingAllTask)
+//get all today Data
+router.get('/today', checkLogin , getTodayAllTask)
 //get single data 
 router.get('/:id' , getDataByID)
 //get single data by project ID

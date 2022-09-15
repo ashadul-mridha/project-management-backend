@@ -9,6 +9,8 @@ const{
     getDataByID,
     getProjectByUserID,
     getTaskByUserID,
+    getTodayTaskByUserID,
+    getUpcommingTaskByUserID,
     sendMail
 } = require('../controllers/userController');
 const { checkLogin } = require('../middlewares/common/checkAuthorization');
@@ -23,6 +25,10 @@ router.get('/' , getAllData)
 router.get('/project', checkLogin , getProjectByUserID)
 //get all task by user
 router.get('/task', checkLogin , getTaskByUserID)
+//get today task by user
+router.get('/task/today', checkLogin , getTodayTaskByUserID)
+//get upcomming task by user
+router.get('/task/upcomming', checkLogin , getUpcommingTaskByUserID)
 //get user by if
 router.get('/:id' , getDataByID)
 

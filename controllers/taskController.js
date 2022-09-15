@@ -5,6 +5,7 @@ const uploadFolder = path.join( __dirname , '/../public/images/uploads/task');
 const {genarateSlug, uploadFileName} = require('../utilities/utilitiesFunction');
 
 //Import model
+const { Op } = require("sequelize");
 const Task = db.task;
 const User = db.user;
 const TaskUser = db.taskUser;
@@ -186,6 +187,75 @@ const getAllData = async (req, res) => {
     }
 }
 
+//get all upcomming Task
+const getUpcommingAllTask = async (req, res) => {
+    try {
+        const data = await Task.findAll({
+          where : {
+            remain : {
+              [Op.gt]: new Date()
+            }
+          },
+          
+          attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+          include: [{
+            model: User,
+            attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+          }]
+        });
+        
+        res.send({
+          status: true,
+          message: "Data Get Successfull",
+          data : data,
+          statusCode: 200
+        })
+
+    } catch (error) {
+        res.send({
+          status: false,
+          message: error.message,
+          data : null,
+          statusCode: 500
+        })
+    }
+}
+
+//get all upcomming Task
+const getTodayAllTask = async (req, res) => {
+    try {
+        const data = await Task.findAll({
+          where : {
+            remain : {
+              [Op.lt]: new Date(),
+              [Op.gt]: new Date(new Date() - 24 * 60 * 60 * 1000)
+            }
+          },
+          
+          attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+          include: [{
+            model: User,
+            attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+          }]
+        });
+        
+        res.send({
+          status: true,
+          message: "Data Get Successfull",
+          data : data,
+          statusCode: 200
+        })
+
+    } catch (error) {
+        res.send({
+          status: false,
+          message: error.message,
+          data : null,
+          statusCode: 500
+        })
+    }
+}
+
 //get single data
 const getDataByID = async (req,res) => {
     try {
@@ -287,6 +357,8 @@ module.exports = {
     addTaskAndImage,
     addData,
     getAllData,
+    getUpcommingAllTask,
+    getTodayAllTask,
     getDataByID,
     getDataByProjectID,
     updateDataByID,
