@@ -71,7 +71,8 @@ const registrationUser = async (req,res) => {
                 password : hashedPassword,
                 userRole : req.body.userRole ? req.body.userRole : 'user',
                 image: finalFileName,
-                active: req.body.active ? req.body.active : false
+                active: true
+                // active: req.body.active ? req.body.active : false
             }
 
             //inset about us data
@@ -199,7 +200,7 @@ const getDataByID = async (req, res) => {
 
         const data = await User.findOne({
           where : { id : id},
-          attributes: ['id' ,'name', 'email', 'userRole','image'],
+          attributes: ['id' ,'name', 'email', 'userRole','image', 'active'],
         });
 
         res.send({
