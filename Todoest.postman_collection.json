@@ -19,12 +19,12 @@
 							"formdata": [
 								{
 									"key": "name",
-									"value": "Admin",
+									"value": "Ashadul",
 									"type": "text"
 								},
 								{
 									"key": "email",
-									"value": "admin@gmail.com",
+									"value": "ashadul@gmail.com",
 									"type": "text"
 								},
 								{
@@ -35,17 +35,18 @@
 								{
 									"key": "image",
 									"type": "file",
-									"src": "/C:/Users/Asadul vai/Downloads/ashadul.jpg"
+									"src": "/C:/Users/Decode/Downloads/avatar/avatar2.avif"
 								},
 								{
 									"key": "userRole",
-									"value": "admin",
+									"value": "user",
 									"type": "text"
 								},
 								{
 									"key": "active",
 									"value": "true",
-									"type": "text"
+									"type": "text",
+									"disabled": true
 								}
 							]
 						},
@@ -72,7 +73,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"admin@gmail.com\",\r\n    \"password\" : \"12345678\"\r\n}",
+							"raw": "{\r\n    \"email\": \"ashadul@gmail.com\",\r\n    \"password\" : \"12345678\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -90,6 +91,141 @@
 								"api",
 								"user",
 								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All user",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/user",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Tasks By User Id",
+					"request": {
+						"auth": {
+							"type": "bearer"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjIsIm5hbWUiOiJBc2hhZHVsIiwiZW1haWwiOiJhc2hhZHVsQGdtYWlsLmNvbSIsImltYWdlIjoibWQtZHVyYW4tMXZxaHJ3eGNjY3ctdW5zcGxhc2gtMTY2MjM3OTYxNjIzMS5qcGciLCJ1c2VyUm9sZSI6InVzZXIiLCJpYXQiOjE2NjMxNDY4NTEsImV4cCI6MTY2MzE5MDA1MX0.SAYoamV5KAnJQwIBiIEf9qaOXXw0Y9xQTEqwixk2G3s",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/user/task",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"user",
+								"task"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get projects By User Id",
+					"request": {
+						"auth": {
+							"type": "bearer"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjIsIm5hbWUiOiJBc2hhZHVsIiwiZW1haWwiOiJhc2hhZHVsQGdtYWlsLmNvbSIsImltYWdlIjoibWQtZHVyYW4tMXZxaHJ3eGNjY3ctdW5zcGxhc2gtMTY2MjM3OTYxNjIzMS5qcGciLCJ1c2VyUm9sZSI6InVzZXIiLCJpYXQiOjE2NjMyMTUxNjYsImV4cCI6MTY2MzI1ODM2Nn0.8EmMHE522cfvqdw92kEz_3seelDXqicIZITLso1b_XM",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/user/project",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"user",
+								"project"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/user/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"user",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All user",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/user",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"user"
 							]
 						}
 					},
@@ -176,6 +312,668 @@
 							"path": [
 								"api",
 								"setting"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Project",
+			"item": [
+				{
+					"name": "Add Data",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Technology",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/Asadul vai/Downloads/nejc-soklic-wO42Rmamef8-unsplash.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/project",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"project"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Project All Data",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Technology",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/Decode/Downloads/elisa-calvet-b-S3nUOqDmUvc-unsplash.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/project/all",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"project",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All Data",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjIsIm5hbWUiOiJBc2hhZHVsIiwiZW1haWwiOiJhc2hhZHVsQGdtYWlsLmNvbSIsImltYWdlIjoibWQtZHVyYW4tMXZxaHJ3eGNjY3ctdW5zcGxhc2gtMTY2MjM3OTYxNjIzMS5qcGciLCJ1c2VyUm9sZSI6InVzZXIiLCJpYXQiOjE2NjMxNTE3NzAsImV4cCI6MTY2MzE5NDk3MH0.0esPHxTQ9RTGuTbBA57rbYSE4LyXi6UmMfiacjLad9w",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/project",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"project"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Data By User",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjIsIm5hbWUiOiJBc2hhZHVsIiwiZW1haWwiOiJhc2hhZHVsQGdtYWlsLmNvbSIsImltYWdlIjoibWQtZHVyYW4tMXZxaHJ3eGNjY3ctdW5zcGxhc2gtMTY2MjM3OTYxNjIzMS5qcGciLCJ1c2VyUm9sZSI6InVzZXIiLCJpYXQiOjE2NjI2MzI4MTIsImV4cCI6MTY2MjY3NjAxMn0.gCykwXZHmEmiOwqOP5URH52A6oKWgzskpYDHcOIvw60",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/project/user",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"project",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All Data Copy",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEsIm5hbWUiOiJBZG1pbiIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwiaW1hZ2UiOiJhc2hhZHVsLTE2NjEzMzMzNDE0MTMuanBnIiwidXNlclJvbGUiOiJhZG1pbiIsImlhdCI6MTY2MTMzNDM2MywiZXhwIjoxNjYxMzQzMDAzfQ.SDkBr4EBoDHUjLhtdnDpTTmOGm5i5viDuGFdM7YLBpA",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Education",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/Asadul vai/Downloads/redux-reducer.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/project/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"project",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Single Data By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/project/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"project",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Project Status",
+			"item": [
+				{
+					"name": "Add Data",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"name\" : \"Start\",\r\n        \"projectId\" : 5,\r\n        \"active\" : true\r\n    },\r\n    {\r\n        \"name\" : \"Inprogress\",\r\n        \"projectId\" : 5,\r\n        \"active\" : true\r\n    },\r\n    {\r\n        \"name\" : \"Complete\",\r\n        \"projectId\" : 5,\r\n        \"active\" : true\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/projectStatus",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"projectStatus"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All Data",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEsIm5hbWUiOiJBZG1pbiIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwiaW1hZ2UiOiJhc2hhZHVsLTE2NjEzMzMzNDE0MTMuanBnIiwidXNlclJvbGUiOiJhZG1pbiIsImlhdCI6MTY2MTc1NjIxMCwiZXhwIjoxNjYxNzY0ODUwfQ.O2-zYPY_r53Lenwuct_64-kxtiKnpIWe2jtUYemomXk",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/project",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"project"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All Data Copy",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEsIm5hbWUiOiJBZG1pbiIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwiaW1hZ2UiOiJhc2hhZHVsLTE2NjEzMzMzNDE0MTMuanBnIiwidXNlclJvbGUiOiJhZG1pbiIsImlhdCI6MTY2MTMzNDM2MywiZXhwIjoxNjYxMzQzMDAzfQ.SDkBr4EBoDHUjLhtdnDpTTmOGm5i5viDuGFdM7YLBpA",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Education",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/Asadul vai/Downloads/redux-reducer.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/project/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"project",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Task",
+			"item": [
+				{
+					"name": "Add Data",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\" : \"Redux Toolkit\",\r\n    \"desc\" : \"assign3 redux react\",\r\n    \"projectId\" : 2,\r\n    \"statusId\": 1,\r\n    \"remain\": \"2023-04-21\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/task",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"task"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All Data",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjIsIm5hbWUiOiJBc2hhZHVsIiwiZW1haWwiOiJhc2hhZHVsQGdtYWlsLmNvbSIsImltYWdlIjoibWQtZHVyYW4tMXZxaHJ3eGNjY3ctdW5zcGxhc2gtMTY2MjM3OTYxNjIzMS5qcGciLCJ1c2VyUm9sZSI6InVzZXIiLCJpYXQiOjE2NjMxNDY4NTEsImV4cCI6MTY2MzE5MDA1MX0.SAYoamV5KAnJQwIBiIEf9qaOXXw0Y9xQTEqwixk2G3s",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/task",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"task"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Upcomming All Task",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjIsIm5hbWUiOiJBc2hhZHVsIiwiZW1haWwiOiJhc2hhZHVsQGdtYWlsLmNvbSIsImltYWdlIjoibWQtZHVyYW4tMXZxaHJ3eGNjY3ctdW5zcGxhc2gtMTY2MjM3OTYxNjIzMS5qcGciLCJ1c2VyUm9sZSI6InVzZXIiLCJpYXQiOjE2NjMyMTUxNjYsImV4cCI6MTY2MzI1ODM2Nn0.8EmMHE522cfvqdw92kEz_3seelDXqicIZITLso1b_XM",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/task/upcomming",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"task",
+								"upcomming"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Today All Task",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjIsIm5hbWUiOiJBc2hhZHVsIiwiZW1haWwiOiJhc2hhZHVsQGdtYWlsLmNvbSIsImltYWdlIjoibWQtZHVyYW4tMXZxaHJ3eGNjY3ctdW5zcGxhc2gtMTY2MjM3OTYxNjIzMS5qcGciLCJ1c2VyUm9sZSI6InVzZXIiLCJpYXQiOjE2NjMyMTUxNjYsImV4cCI6MTY2MzI1ODM2Nn0.8EmMHE522cfvqdw92kEz_3seelDXqicIZITLso1b_XM",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/task/today",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"task",
+								"today"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Data By Project ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEsIm5hbWUiOiJBZG1pbiIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwiaW1hZ2UiOiJhc2hhZHVsLTE2NjEzMzMzNDE0MTMuanBnIiwidXNlclJvbGUiOiJhZG1pbiIsImlhdCI6MTY2MTc0ODIzNywiZXhwIjoxNjYxNzU2ODc3fQ.MKwlpaKrDtGsFqOQhMLt6E1MT91YSWQ1cjXRN9YyiQQ",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/task/project/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"task",
+								"project",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Data By ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEsIm5hbWUiOiJBZG1pbiIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwiaW1hZ2UiOiJhc2hhZHVsLTE2NjEzMzMzNDE0MTMuanBnIiwidXNlclJvbGUiOiJhZG1pbiIsImlhdCI6MTY2MTc0ODIzNywiZXhwIjoxNjYxNzU2ODc3fQ.MKwlpaKrDtGsFqOQhMLt6E1MT91YSWQ1cjXRN9YyiQQ",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/task/18",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"task",
+								"18"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All Data Copy",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEsIm5hbWUiOiJBZG1pbiIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwiaW1hZ2UiOiJhc2hhZHVsLTE2NjEzMzMzNDE0MTMuanBnIiwidXNlclJvbGUiOiJhZG1pbiIsImlhdCI6MTY2MTMzNDM2MywiZXhwIjoxNjYxMzQzMDAzfQ.SDkBr4EBoDHUjLhtdnDpTTmOGm5i5viDuGFdM7YLBpA",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Education",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/Asadul vai/Downloads/redux-reducer.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/project/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"project",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Task Image",
+			"item": [
+				{
+					"name": "Add Data",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"warning": "This is a duplicate header and will be overridden by the Content-Type header generated by Postman.",
+								"key": "Content-Type",
+								"value": "multipart/form-data",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEsIm5hbWUiOiJBZG1pbiIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwiaW1hZ2UiOiJ0ZXN0bW9uaWFsdXNlci0xNjYxODU5MDcyNTEyLmpmaWYiLCJ1c2VyUm9sZSI6ImFkbWluIiwiaWF0IjoxNjYxOTQ0MTM4LCJleHAiOjE2NjE5NTI3Nzh9.Xgx3mwmEPtSgGM41U2QmZg7GdekgVRV1IqZd1cE9xxM",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "taskId",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/Asadul vai/Downloads/nejc-soklic-wO42Rmamef8-unsplash.jpg",
+									"disabled": true
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/Asadul vai/Downloads/kimberly-farmer-lUaaKCUANVI-unsplash.jpg",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/task/image",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"task",
+								"image"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All Data",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEsIm5hbWUiOiJBZG1pbiIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwiaW1hZ2UiOiJ0ZXN0bW9uaWFsdXNlci0xNjYxODU5MDcyNTEyLmpmaWYiLCJ1c2VyUm9sZSI6ImFkbWluIiwiaWF0IjoxNjYxOTQ0MTM4LCJleHAiOjE2NjE5NTI3Nzh9.Xgx3mwmEPtSgGM41U2QmZg7GdekgVRV1IqZd1cE9xxM",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/task/image/all",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"task",
+								"image",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get data by id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEsIm5hbWUiOiJBZG1pbiIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwiaW1hZ2UiOiJ0ZXN0bW9uaWFsdXNlci0xNjYxODU5MDcyNTEyLmpmaWYiLCJ1c2VyUm9sZSI6ImFkbWluIiwiaWF0IjoxNjYxOTQ0MTM4LCJleHAiOjE2NjE5NTI3Nzh9.Xgx3mwmEPtSgGM41U2QmZg7GdekgVRV1IqZd1cE9xxM",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/task/image/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"task",
+								"image",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Image By Id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/task/image/9",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"task",
+								"image",
+								"9"
 							]
 						}
 					},
