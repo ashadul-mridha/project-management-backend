@@ -267,11 +267,11 @@ const getDataByID = async (req,res) => {
           include:[
             {
               model: TaskImage,
-              attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+              attributes: {exclude: ['createdBy','updatedBy','deletedBy', 'updatedAt','deletedAt']},
             },
             {
               model: User,
-              attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+              attributes: {exclude: ['createdBy','updatedBy','deletedBy', 'updatedAt','deletedAt']},
             },
             {
               model: Comment,
