@@ -37,6 +37,7 @@ db.projectUser = require('./project_user')(sequelize, DataTypes);
 db.task = require('./taskModel')(sequelize, DataTypes);
 db.taskUser = require('./taskUser')(sequelize, DataTypes);
 db.taskImage = require('./taskImageModel')(sequelize, DataTypes);
+db.comment = require('./commentModel')(sequelize, DataTypes);
 db.setting = require('./settingModel')(sequelize, DataTypes);
 
 //database with model and create table
@@ -51,6 +52,10 @@ db.sequelize.sync({force: false})
 //all relations
 
 // 1 to many relation
+
+db.user.hasMany(db.comment , {
+  foreignKey: 'userId'
+})
 db.project.hasMany(db.projectStatus , {
   foreignKey: 'projectId'
 })
@@ -63,6 +68,9 @@ db.projectStatus.hasMany(db.task , {
 db.task.hasMany(db.taskImage , {
   foreignKey: 'taskId'
 })
+db.task.hasMany(db.comment , {
+  foreignKey: 'taskId'
+})
 db.task.hasMany(db.taskUser , {
   foreignKey: 'taskId'
 })
@@ -73,6 +81,9 @@ db.task.belongsTo(db.project , {
 })
 db.task.belongsTo(db.projectStatus , {
   foreignKey: 'statusId'
+})
+db.comment.belongsTo(db.user , {
+  foreignKey: 'userId'
 })
 // many to many relation
 db.project.belongsToMany(db.user, {

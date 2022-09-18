@@ -12,6 +12,7 @@ const TaskUser = db.taskUser;
 const TaskImage = db.taskImage;
 const ProjectStatus = db.projectStatus;
 const Project = db.project;
+const Comment = db.comment;
 
 //add task & task image and task user
 const addTaskAndImage = async (req,res) => {
@@ -260,8 +261,23 @@ const getTodayAllTask = async (req, res) => {
 const getDataByID = async (req,res) => {
     try {
         const {id} = req.params;
-        const data = await Task.findOne({ where : {id: id}, 
-          include:[{model: TaskImage}, {model: User}]
+        const data = await Task.findOne({
+          where : {id: id},
+          attributes: {exclude: ['createdBy','updatedBy','deletedBy', 'updatedAt','deletedAt']},
+          include:[
+            {
+              model: TaskImage,
+              attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+            },
+            {
+              model: User,
+              attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+            },
+            {
+              model: Comment,
+              attributes: {exclude: ['createdBy','updatedBy','deletedBy', 'updatedAt','deletedAt']},
+            }
+          ]
         })
         res.send({
           status: true,

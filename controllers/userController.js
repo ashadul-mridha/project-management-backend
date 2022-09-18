@@ -168,7 +168,7 @@ const registrationUser = async (req,res) => {
 const getAllData = async (req, res) => {
     try {
         const data = await User.findAll({
-          attributes: ['id', 'name', 'email', 'userRole','image', 'active'],
+          attributes: ['id', 'name', 'email', 'userRole','image', 'active', 'createdAt'],
           where: {
             email: {
               [Op.not]: 'admin@gmail.com'
