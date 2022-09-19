@@ -275,7 +275,11 @@ const getDataByID = async (req,res) => {
             },
             {
               model: Comment,
-              attributes: {exclude: ['createdBy','updatedBy','deletedBy', 'updatedAt','deletedAt']},
+              attributes: {exclude: ['userId', 'taskId','createdBy','updatedBy','deletedBy', 'updatedAt','deletedAt']},
+              include:[{
+                model: User,
+                attributes: {exclude: ['password','createdBy','updatedBy','deletedBy', 'updatedAt','deletedAt']},
+              }]
             }
           ]
         })
