@@ -9,7 +9,7 @@ const addData = async (req,res) => {
     try {
 
         //inset data
-        const newData = await Comment.create(data);
+        const newData = await Comment.create(req.body);
 
         res.send({
           status: true,
@@ -115,11 +115,14 @@ const deleteDataById = async (req,res) => {
     try {
         const {id} = req.params;
 
-        await Comment.destroy({ where : {id: id}})
+        //set who delete
+        await Comment.update( { deletedBy : req.user.id} , { where : {id: id}});
+
+        await Comment.destroy({ where : {id: id}});
+        
         res.send({
           status: true,
-          message: 'project User Remove',
-          data : null,
+          message: 'Comment has been delete',
           statusCode: 500
         }) 
 
