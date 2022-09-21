@@ -231,9 +231,16 @@ const getProjectByUserID = async (req, res) => {
           include:[
             {
               model: Project, 
+              order: [
+                ["id", "ASC"],
+              ],
               attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']}, 
               include:[{
                 model: ProjectStatus ,
+                order: [
+                  ["id", "ASC"],
+                ],
+                separate: true,
                 attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
                 include : [{
                   model: Task,

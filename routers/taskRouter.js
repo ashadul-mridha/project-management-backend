@@ -12,6 +12,7 @@ const{
     getDataByID,
     getDataByProjectID,
     updateDataByID,
+    updateStatusByTaskID,
     deleteDataById
 } = require('../controllers/taskController');
 
@@ -31,6 +32,8 @@ router.get('/:id' , getDataByID)
 router.get('/project/:projectId' , getDataByProjectID)
 //update single data 
 router.put('/:id' , checkLogin , updateDataByID)
+//update single data 
+router.put('/changeStatus/:id' , checkLogin , updateStatusByTaskID)
 //delete single data 
 router.delete('/:id' , deleteDataById)
 

@@ -165,6 +165,9 @@ const getAllData = async (req, res) => {
     try {
         const data = await Task.findAll({
           attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+          order: [
+            ["id", "ASC"],
+          ],
           include: [{
             model: User,
             attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
@@ -355,6 +358,35 @@ const updateDataByID = async (req,res) => {
     }
 }
 
+//Update single data by using id
+const updateStatusByTaskID = async (req,res) => {
+    try {
+        //update id
+        const {id} = req.params;
+        
+
+        const uploadData = { statusId : req.body.statusId , updatedBy: req.user.id }
+
+        //update data
+        const data = await Task.update( uploadData , { where : {id: id}})
+        
+        res.send({
+          status: true,
+          message: "Task Status Update Successfull",
+          data : data,
+          statusCode: 200
+        })
+
+    } catch (error) {
+        res.send({
+          status: false,
+          message: error.message,
+          data : null,
+          statusCode: 500
+        }) 
+    }
+}
+
 //delete single data by using id
 const deleteDataById = async (req,res) => {
     try {
@@ -382,5 +414,6 @@ module.exports = {
     getDataByID,
     getDataByProjectID,
     updateDataByID,
+    updateStatusByTaskID,
     deleteDataById
 }

@@ -157,9 +157,16 @@ const addData = async (req,res) => {
 const getAllData = async (req, res) => {
     try {
         const data = await Project.findAll({
+          order: [
+            ["id", "ASC"],
+          ],
           attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
           include:[{
             model: ProjectStatus ,
+            order: [
+              ["id", "ASC"],
+            ],
+            separate: true,
             attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
             include :{
               model: Task,
@@ -311,10 +318,6 @@ const getProjectUserByProjectId = async (req,res) => {
         }) 
     }
 }
-
-
-
-
 
 //Update single data by using id
 const updateDataByID = async (req,res) => {
