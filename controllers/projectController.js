@@ -5,6 +5,7 @@ const uploadFolder = path.join( __dirname , '/../public/images/uploads/project')
 const { genarateSlug, uploadFileName } = require('../utilities/utilitiesFunction');
 
 //Import model
+const User = db.user;
 const Project = db.project;
 const ProjectStatus = db.projectStatus;
 const ProjectUser = db.projectUser;
@@ -283,6 +284,35 @@ const getDataBySlug = async (req,res) => {
     }
 }
 
+// get project user
+const getProjectUserByProjectId = async (req,res) => {
+    try {
+        const {id} = req.params;
+        const data = await ProjectUser.findAll({ where : {projectId: id}, 
+          attributes: {exclude: ['projectId','createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+          include:[{
+            model: User ,
+            attributes: {exclude: ['password','createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+          }]
+
+        })
+        res.send({
+          status: true,
+          message: "Data Get Successfull",
+          data : data,
+          statusCode: 200
+        })
+    } catch (error) {
+        res.send({
+          status: false,
+          message: error.message,
+          data : null,
+          statusCode: 500
+        }) 
+    }
+}
+
+
 
 
 
@@ -393,6 +423,7 @@ module.exports = {
     getAllDataByUser,
     getDataByID,
     getDataBySlug,
+    getProjectUserByProjectId,
     updateDataByID,
     deleteDataById
 }

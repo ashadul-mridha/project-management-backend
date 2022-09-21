@@ -74,6 +74,9 @@ db.task.hasMany(db.comment , {
 db.task.hasMany(db.taskUser , {
   foreignKey: 'taskId'
 })
+db.projectUser.belongsTo(db.user , {
+  foreignKey: 'userId'
+})
 
 // many to one relation
 db.task.belongsTo(db.project , {

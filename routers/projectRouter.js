@@ -10,6 +10,7 @@ const{
     getAllDataByUser,
     getDataByID,
     getDataBySlug,
+    getProjectUserByProjectId,
     updateDataByID,
     deleteDataById
 } = require('../controllers/projectController');
@@ -24,6 +25,8 @@ router.get('/', checkLogin , getAllData)
 router.get('/user', checkLogin , getAllDataByUser)
 //get single data by id
 router.get('/:id' , getDataByID)
+//get project user by project id
+router.get('/user/:id' , getProjectUserByProjectId)
 //get single data by slug
 router.get('/slug/:slug' , getDataBySlug)
 //update single data 
