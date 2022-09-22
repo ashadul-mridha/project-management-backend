@@ -267,6 +267,10 @@ const getDataBySlug = async (req,res) => {
           attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
           include:[{
             model: ProjectStatus ,
+            order: [
+              ["id", "ASC"],
+            ],
+            separate: true,
             attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
             include :{
               model: Task,
