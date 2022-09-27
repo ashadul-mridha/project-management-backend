@@ -8,6 +8,7 @@ const{
     getAllData,
     getDataByID,
     getProjectByUserID,
+    getProjectBySlugAndUserID,
     getTaskByUserID,
     getTodayTaskByUserID,
     getUpcommingTaskByUserID,
@@ -23,6 +24,8 @@ router.post('/login' , loginUser)
 router.get('/' , getAllData)
 //get all project by user
 router.get('/project', checkLogin , getProjectByUserID)
+//get all project by user
+router.get('/project/:slug', checkLogin , getProjectBySlugAndUserID)
 //get all task by user
 router.get('/task', checkLogin , getTaskByUserID)
 //get today task by user

@@ -244,6 +244,87 @@ const getProjectByUserID = async (req, res) => {
                 attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
                 include : [{
                   model: Task,
+                  include : [{
+                    model: TaskUser,
+                    where: {
+                        userId: req.user.id
+                    },
+                    include : [{
+                      model: Task,
+                      attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+                      
+                    }],
+                    attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+                    
+                  }],
+                  attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+                  
+                }]
+              }]
+            }
+          ]
+        });
+
+        res.send({
+          status: true,
+          message: "Data Get Successfull",
+          data : data,
+          statusCode: 200
+        })
+
+    } catch (error) {
+        res.send({
+          status: false,
+          message: error.message,
+          data : null,
+          statusCode: 500
+        })
+    }
+}
+
+
+//get user by id include project
+const getProjectBySlugAndUserID = async (req, res) => {
+    try {
+
+      
+        const {slug} = req.params;
+
+        const data = await User.findOne({
+          where : { id : req.user.id},
+          attributes: ['id' ,'name', 'email', 'userRole','image'],
+          include:[
+            {
+              model: Project, 
+              where: {
+                slug: slug
+              },
+              order: [
+                ["id", "ASC"],
+              ],
+              attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']}, 
+              include:[{
+                model: ProjectStatus ,
+                order: [
+                  ["id", "ASC"],
+                ],
+                separate: true,
+                attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+                include : [{
+                  model: Task,
+                  include : [{
+                    model: TaskUser,
+                    where: {
+                        userId: req.user.id
+                    },
+                    include : [{
+                      model: Task,
+                      attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+                      
+                    }],
+                    attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+                    
+                  }],
                   attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
                   
                 }]
@@ -461,6 +542,7 @@ module.exports = {
     getAllData,
     getDataByID,
     getProjectByUserID,
+    getProjectBySlugAndUserID,
     getTaskByUserID,
     getTodayTaskByUserID,
     getUpcommingTaskByUserID,

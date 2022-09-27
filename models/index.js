@@ -39,6 +39,8 @@ db.taskUser = require('./taskUser')(sequelize, DataTypes);
 db.taskImage = require('./taskImageModel')(sequelize, DataTypes);
 db.comment = require('./commentModel')(sequelize, DataTypes);
 db.setting = require('./settingModel')(sequelize, DataTypes);
+db.meeting = require('./meetingModal')(sequelize, DataTypes);
+db.meetingUser = require('./meetingUserModal')(sequelize, DataTypes);
 
 //database with model and create table
 db.sequelize.sync({force: false})
@@ -52,7 +54,6 @@ db.sequelize.sync({force: false})
 //all relations
 
 // 1 to many relation
-
 db.user.hasMany(db.comment , {
   foreignKey: 'userId'
 })
@@ -86,6 +87,9 @@ db.task.belongsTo(db.projectStatus , {
   foreignKey: 'statusId'
 })
 db.comment.belongsTo(db.user , {
+  foreignKey: 'userId'
+})
+db.taskUser.belongsTo(db.task , {
   foreignKey: 'userId'
 })
 // many to many relation

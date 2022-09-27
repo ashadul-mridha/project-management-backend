@@ -12,7 +12,12 @@ const ProjectUser = db.projectUser;
 const Task = db.task;
 
 
-//const add new data
+
+/**
+ * It takes a request, and returns a response and insert project all data.
+ * @param req - The request object.
+ * @param res - The response object.
+ */
 const addProjectAllData = async (req,res) => {
     try {
 
@@ -87,7 +92,12 @@ const addProjectAllData = async (req,res) => {
     }
 }
 
-//const add new data
+
+/**
+ * It takes image from the request, renames it, and saves it to a folder and save all data to the database.
+ * @param req - The request object.
+ * @param res - The response object.
+ */
 const addData = async (req,res) => {
     try {
 
@@ -153,7 +163,13 @@ const addData = async (req,res) => {
     }
 }
 
-//get all data
+
+/**
+ * It gets all the data from the Project table, and then gets all the data from the ProjectStatus
+ * table, and then gets all the data from the Task table.
+ * @param req - The request object.
+ * @param res - The response object.
+ */
 const getAllData = async (req, res) => {
     try {
         const data = await Project.findAll({
@@ -192,7 +208,12 @@ const getAllData = async (req, res) => {
     }
 }
 
-//get all data by user
+/**
+ * It gets all the data from the Project table, and then gets all the data from the ProjectStatus
+ * table, and then gets all the data from the Task table.
+ * @param req - The request object.
+ * @param res - The response object.
+ */
 const getAllDataByUser = async (req, res) => {
     try {
         const data = await Project.findAll({
@@ -226,7 +247,11 @@ const getAllDataByUser = async (req, res) => {
 }
 
 
-//get single data by id
+/**
+ * It gets a project by id, and includes the project status and tasks associated with that project.
+ * @param req - The request object.
+ * @param res - The response object.
+ */
 const getDataByID = async (req,res) => {
     try {
         const {id} = req.params;
@@ -259,7 +284,13 @@ const getDataByID = async (req,res) => {
 }
 
 
-//get single data
+
+/**
+ * It gets a project by its slug, and includes the project status and tasks associated with that
+ * project.
+ * @param req - The request object.
+ * @param res - The response object.
+ */
 const getDataBySlug = async (req,res) => {
     try {
         const {slug} = req.params;
@@ -295,7 +326,12 @@ const getDataBySlug = async (req,res) => {
     }
 }
 
-// get project user
+/**
+ * It gets all the users that are assigned to a project by the project id.
+ * </code>
+ * @param req - The request object.
+ * @param res - The response object.
+ */
 const getProjectUserByProjectId = async (req,res) => {
     try {
         const {id} = req.params;
@@ -323,7 +359,13 @@ const getProjectUserByProjectId = async (req,res) => {
     }
 }
 
-//Update single data by using id
+
+/**
+ * It takes the id from the url, finds the data from the database, deletes the image from the server,
+ * uploads the new image to the server, and updates the data in the database.
+ * @param req - The request object.
+ * @param res - The response object.
+ */
 const updateDataByID = async (req,res) => {
     try {
         //update id
@@ -397,7 +439,12 @@ const updateDataByID = async (req,res) => {
     }
 }
 
-//delete single data by using id
+
+/**
+ * It deletes a record from the database and deletes the image from the server.
+ * @param req - The request object.
+ * @param res - The response object.
+ */
 const deleteDataById = async (req,res) => {
     try {
         const {id} = req.params;
