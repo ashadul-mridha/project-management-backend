@@ -30,11 +30,12 @@ const addData = async (req,res) => {
             name : req.body.name,
             link : req.body.link,
             password : req.body.password,
-            startTime : req.body.startTime,
-            endTime : req.body.endTime,
+            startDate : req.body.startDate,
+            endDate : req.body.endDate,
             desc : req.body.desc,
             createdBy : req.user.id
         }       
+
         /* Creating a new meeting record in the database. */
         const meetingRes = await Meeting.create(meetingData);
 
@@ -88,20 +89,30 @@ const addData = async (req,res) => {
     }
 }
 
-//get all data
+
+/**
+ * It gets all the meeting from the database and sends it to the frontend.
+ * @param req - The request object.
+ * @param res - The response object.
+ */
 const getAllData = async (req, res) => {
     try {
-        // const data = await Meeting.findAll({
-        //   attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
-        //   order: [
-        //     ["id", "ASC"],
-        //   ]
-        // });
+
+        const data = await Meeting.findAll({
+          attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+          order: [
+            ["id", "ASC"],
+          ],
+          include: [{
+            model: User,
+            attributes: {exclude: ['meeting_user','createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+          }]
+        });
         
         res.send({
           status: true,
           message: "Meeting Get Successfull",
-          data : {name : 'ashadul'},
+          data : data,
           statusCode: 200
         })
 

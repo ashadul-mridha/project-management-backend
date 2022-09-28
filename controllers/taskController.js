@@ -191,7 +191,11 @@ const getAllData = async (req, res) => {
     }
 }
 
-//get all upcomming Task
+/**
+ * It's a function that gets all the tasks that have a remain date greater than the current date
+ * @param req - The request object.
+ * @param res - The response object.
+ */
 const getUpcommingAllTask = async (req, res) => {
     try {
         const data = await Task.findAll({
@@ -200,7 +204,6 @@ const getUpcommingAllTask = async (req, res) => {
               [Op.gt]: new Date()
             }
           },
-          
           attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
           include: [{
             model: User,
@@ -225,7 +228,12 @@ const getUpcommingAllTask = async (req, res) => {
     }
 }
 
-//get all upcomming Task
+
+/**
+ * It gets all the tasks that are due today.
+ * @param req - The request object.
+ * @param res - The response object.
+ */
 const getTodayAllTask = async (req, res) => {
     try {
         const data = await Task.findAll({
