@@ -9,6 +9,7 @@ const nodemailer = require("nodemailer");
 
 //Import model
 const User = db.user;
+const Meeting = db.meeting;
 const Project = db.project;
 const ProjectStatus = db.projectStatus;
 const Task = db.task;
@@ -261,6 +262,47 @@ const getProjectByUserID = async (req, res) => {
                   
                 }]
               }]
+            }
+          ]
+        });
+
+        res.send({
+          status: true,
+          message: "Data Get Successfull",
+          data : data,
+          statusCode: 200
+        })
+
+    } catch (error) {
+        res.send({
+          status: false,
+          message: error.message,
+          data : null,
+          statusCode: 500
+        })
+    }
+}
+
+//get user by id include meeting
+const getMeetingByUserID = async (req, res) => {
+    try {
+
+        const data = await User.findOne({
+          where : { id : req.user.id},
+          attributes: ['id' ,'name', 'email', 'userRole','image'],
+          include:[
+            {
+              model: Meeting, 
+              order: [
+                ["id", "ASC"],
+              ],
+              attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+              include :[
+              {
+                  model: User,
+                  attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+              }
+            ] 
             }
           ]
         });
@@ -542,6 +584,7 @@ module.exports = {
     getAllData,
     getDataByID,
     getProjectByUserID,
+    getMeetingByUserID,
     getProjectBySlugAndUserID,
     getTaskByUserID,
     getTodayTaskByUserID,
