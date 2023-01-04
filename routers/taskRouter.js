@@ -35,6 +35,6 @@ router.put('/:id' , checkLogin , updateDataByID)
 //update single data 
 router.put('/changeStatus/:id' , checkLogin , updateStatusByTaskID)
 //delete single data 
-router.delete('/:id' , deleteDataById)
+router.delete('/:id', checkLogin , deleteDataById)
 
 module.exports = router;

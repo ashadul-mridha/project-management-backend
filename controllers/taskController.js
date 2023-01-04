@@ -401,7 +401,11 @@ const deleteDataById = async (req,res) => {
         const {id} = req.params;
 
         await Task.destroy({ where : {id: id}})
-        res.status(200).send('About Us Delete Successfully');
+        res.status(200).send({
+          status: true,
+          message: 'Task Delete Successfull',
+          statusCode: 200
+        });
 
     } catch (error) {
         res.send({
