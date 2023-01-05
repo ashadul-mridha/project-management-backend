@@ -71,6 +71,8 @@ const registrationUser = async (req,res) => {
                 email:req.body.email,
                 password : hashedPassword,
                 userRole : req.body.userRole ? req.body.userRole : 'user',
+                phone:req.body.phone,
+                address:req.body.address,
                 image: finalFileName,
                 active: true
                 // active: req.body.active ? req.body.active : false
