@@ -7,6 +7,7 @@ const{
     loginUser,
     getAllData,
     getDataByID,
+    updateUserById,
     getProjectByUserID,
     getMeetingByUserID,
     getProjectBySlugAndUserID,
@@ -37,6 +38,8 @@ router.get('/task/today', checkLogin , getTodayTaskByUserID)
 router.get('/task/upcomming', checkLogin , getUpcommingTaskByUserID)
 //get user by if
 router.get('/:id' , getDataByID)
+//update user by id
+router.put('/:id' , updateUserById)
 
 router.delete('/' , sendMail)
 
