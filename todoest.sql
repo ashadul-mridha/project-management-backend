@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 05, 2023 at 12:36 PM
+-- Generation Time: Jan 09, 2023 at 06:54 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.30
 
@@ -319,9 +319,9 @@ INSERT INTO `tasks` (`id`, `name`, `slug`, `desc`, `projectId`, `statusId`, `pri
 (12, 'Last One', 'last-one-1663819813647', 'Last One', 1, 1, 'second', '2022-09-30 04:09:46', 2, NULL, NULL, 0, '2022-09-22 04:10:13', '2022-09-22 04:10:13', '2023-01-04 09:06:26', NULL),
 (13, 'In Progress New Task', 'in-progress-new-task-1663833429794', 'In Progress New Task', 1, 2, 'second', '2022-09-23 08:56:40', 2, 1, NULL, 0, '2022-09-22 07:57:09', '2023-01-04 07:54:37', NULL, NULL),
 (14, 'Asif In Progress', 'asif-in-progress-1663833460865', 'Asif In Progress', 1, 3, 'second', '2022-09-30 07:57:15', 2, 1, NULL, 0, '2022-09-22 07:57:40', '2022-09-22 08:11:02', NULL, NULL),
-(15, '1st Task', '1st-task-1663833659987', '1st Task', 3, 7, 'second', '2022-09-30 08:00:07', 1, 1, NULL, 0, '2022-09-22 08:00:59', '2022-09-22 08:03:28', NULL, NULL),
+(15, '1st Task', '1st-task-1672918997864', '<p>1st Task</p>', 3, 7, 'first', '2022-09-30 08:00:07', 1, 1, NULL, 0, '2022-09-22 08:00:59', '2023-01-05 11:43:17', NULL, NULL),
 (16, 'Drik Photo Gallary', 'drik-photo-gallary-1663834310821', 'Drik Photo Gallary', 1, 1, 'first', '2022-09-23 02:14:07', 1, 1, NULL, 0, '2022-09-22 08:11:50', '2023-01-04 07:54:36', NULL, NULL),
-(17, 'Btcl Call', 'btcl-call-1672823333304', 'Btcl Call', 2, 4, 'second', '2023-01-04 09:10:12', 1, NULL, NULL, 0, '2023-01-04 09:08:53', '2023-01-04 09:08:53', NULL, NULL),
+(17, 'Btcl Call', 'btcl-call-1672823333304', 'Btcl Call', 2, 4, 'second', '2023-01-04 09:10:12', 1, NULL, NULL, 0, '2023-01-04 09:08:53', '2023-01-04 09:08:53', '2023-01-05 11:43:01', NULL),
 (18, 'Image Preview', 'image-preview-1672832652030', 'Image Preview', 2, 4, 'thired', '2023-01-05 09:41:58', 1, NULL, NULL, 0, '2023-01-04 11:44:12', '2023-01-04 11:44:12', NULL, NULL);
 
 -- --------------------------------------------------------
@@ -397,11 +397,11 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `userRole`, `phone`, `address`, `image`, `active`, `createdBy`, `updatedBy`, `deletedBy`, `createdAt`, `updatedAt`, `deletedAt`) VALUES
-(1, 'Admin', 'admin@gmail.com', '$2b$10$AZQak67uS4QyOlmxMIqqaeg2bj/TAavwbpjl0l3x0ywDAAXR9iE7y', 'admin', NULL, NULL, 'avatar1-1663245399722.avif', 1, NULL, NULL, NULL, '2022-09-15 12:36:39', '2022-09-15 12:36:39', NULL),
-(2, 'Ashadul', 'ashadul@gmail.com', '$2b$10$1esFKKVsGwA9MZ36GhXCBebF/aDdlPLkuCGhRDjFOSbCKedAdSs4q', 'user', NULL, NULL, 'avatar2-1663245544637.avif', 1, NULL, NULL, NULL, '2022-09-15 12:39:04', '2022-09-15 12:39:04', NULL),
-(3, 'Asif', 'asif@gmail.com', '$2b$10$T0Yyr9Zx0QTA.QjF222wMuvgxI4FgtvMz8pSez92PLmSyvjuT/c5m', 'user', NULL, NULL, 'avatar3-1663245606982.avif', 1, NULL, NULL, NULL, '2022-09-15 12:40:06', '2022-09-15 12:40:06', NULL),
-(4, 'Saikot', 'saikat@gmail.com', '$2b$10$N43jAe3cbkPw7fUd2789MerKldnxGeeev/3R5a.Rs3DkvfVS/4HjC', 'user', NULL, NULL, 'may-gauthier-0j9l9xrymso-unsplash-1663833732920.jpg', 1, NULL, NULL, NULL, '2022-09-22 08:02:12', '2022-09-22 08:02:12', NULL),
-(5, 'Porag', 'porag@gmail.com', '$2b$10$zf6TIyEWY0TSfVD3fWlrRu7AOIQHuzGtq5HiwEC/hiIK8Rn1789O6', 'user', NULL, NULL, 'porag-1672913972348.avif', 1, NULL, NULL, NULL, '2023-01-05 10:19:32', '2023-01-05 10:19:32', NULL),
+(1, 'Admin', 'admin@gmail.com', '$2b$10$AZQak67uS4QyOlmxMIqqaeg2bj/TAavwbpjl0l3x0ywDAAXR9iE7y', 'admin', '01718069307', 'Dhaka, Bangladesh', 'admin-1673181984128.jpg', 1, NULL, NULL, NULL, '2022-09-15 12:36:39', '2023-01-08 12:46:24', NULL),
+(2, 'Ashadul Islam', 'ashadul@gmail.com', '$2b$10$1esFKKVsGwA9MZ36GhXCBebF/aDdlPLkuCGhRDjFOSbCKedAdSs4q', 'user', '01718069307', 'Dhaka, Bangladesh', 'avatar2-1663245544637.avif', 1, NULL, NULL, NULL, '2022-09-15 12:39:04', '2023-01-08 12:56:28', NULL),
+(3, 'Asif', 'asif@gmail.com', '$2b$10$T0Yyr9Zx0QTA.QjF222wMuvgxI4FgtvMz8pSez92PLmSyvjuT/c5m', 'user', '01718069307', 'Dhaka', 'avatar3-1663245606982.avif', 1, NULL, NULL, NULL, '2022-09-15 12:40:06', '2022-09-15 12:40:06', NULL),
+(4, 'Saikot', 'saikat@gmail.com', '$2b$10$N43jAe3cbkPw7fUd2789MerKldnxGeeev/3R5a.Rs3DkvfVS/4HjC', 'user', '01718069307', 'Dhaka', 'may-gauthier-0j9l9xrymso-unsplash-1663833732920.jpg', 1, NULL, NULL, NULL, '2022-09-22 08:02:12', '2022-09-22 08:02:12', NULL),
+(5, 'Porag', 'porag@gmail.com', '$2b$10$zf6TIyEWY0TSfVD3fWlrRu7AOIQHuzGtq5HiwEC/hiIK8Rn1789O6', 'user', '01718069307', 'Dhaka', 'porag-1672913972348.avif', 1, NULL, NULL, NULL, '2023-01-05 10:19:32', '2023-01-05 10:19:32', NULL),
 (6, 'Aysha Khan', 'aysha@gmail.com', '$2b$10$Ec35/vrgI43on7knfwnMjuXrZg2F/AsgiTQxmUNbUUKwXrTViijfG', 'user', '01613503047', 'Dhaka', 'aysha-1672916223589.avif', 1, NULL, NULL, NULL, '2023-01-05 10:57:03', '2023-01-05 10:57:03', NULL);
 
 --
