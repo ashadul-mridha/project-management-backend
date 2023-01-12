@@ -223,9 +223,6 @@ const getDataByID = async (req, res) => {
     }
 }
 
-// update profile by users
-
-
 //Update single data by using id
 const updateUserById = async (req,res) => {
     try {
@@ -280,8 +277,11 @@ const updateUserById = async (req,res) => {
         const uploadData = {
           name : req.body.name,
           phone: req.body.phone,
+          email: req.body.email,
           address: req.body.address,
-          image : finalFileName
+          image : finalFileName,
+          active: req.body.active,
+          userRole : req.body.userRole,
         }
 
 
