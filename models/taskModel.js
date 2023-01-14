@@ -29,7 +29,11 @@ module.exports = (sequelize , DataTypes) => {
             type: DataTypes.ENUM("first", "second", "thired"),
             defaultValue: "four",
         },
-        remain: {
+        start_time: {
+            type: DataTypes.DATE,
+            allowNull: false
+        },
+        end_time: {
             type: DataTypes.DATE,
             allowNull: false
         },

@@ -34,7 +34,8 @@ const addTaskAndImage = async (req,res) => {
           projectId: req.body.projectId,
           statusId: req.body.statusId,
           priority: req.body.priority,
-          remain: req.body.remain,
+          start_time: req.body.start_time,
+          end_time: req.body.end_time,
           status: req.body.status ? req.body.status : false,
           createdBy : req.user.id 
         }
