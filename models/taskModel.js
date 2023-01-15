@@ -13,8 +13,9 @@ module.exports = (sequelize , DataTypes) => {
             type: DataTypes.TEXT,
             allowNull: false
         },
+        // its save on db long text
         desc: {
-            type: DataTypes.STRING,
+            type: DataTypes.TEXT,
             allowNull: true
         },
         projectId: {

@@ -341,11 +341,24 @@ const updateDataByID = async (req,res) => {
     try {
         //update id
         const {id} = req.params;
+
+        console.log('log try');
         
       // genarate slug
       const slug = genarateSlug(req.body.name);
 
-        const uploadData = { ...req.body, slug }
+      // update data
+      const uploadData = {
+          name: req.body.name,
+          slug: slug,
+          desc: req.body.desc,
+          priority: req.body.priority,
+          start_time: req.body.start_time,
+          end_time: req.body.end_time,
+          updatedBy : req.user.id 
+        }
+
+        // const uploadData = { ...req.body, slug }
 
         //update data
         const data = await Task.update( uploadData , { where : {id: id}})
@@ -358,6 +371,9 @@ const updateDataByID = async (req,res) => {
         })
 
     } catch (error) {
+
+      console.log('catch');
+      console.log(error);
         res.send({
           status: false,
           message: error.message,
