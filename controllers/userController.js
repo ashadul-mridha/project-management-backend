@@ -7,6 +7,8 @@ const CryptoJS = require("crypto-js");
 const jwt = require("jsonwebtoken");
 const uploadFolder = path.join( __dirname , '/../public/images/uploads/user');
 const nodemailer = require("nodemailer");
+const smtpConfig = require("../config/smtpConfig");
+const resetPasswordMail = require("../mail/resetPassword");
 
 //Import model
 const User = db.user;
@@ -763,43 +765,93 @@ const getUpcommingTaskByUserID = async (req, res) => {
 const sendMail = async (req, res) => {
 
 
-	let transporter = nodemailer.createTransport({
-		pool: true,
-		host: "mail.test.amaderrel.com",
-		port: 465,
-		secure: true, // true for 465, false for other ports
-		auth: {
-			user: 'todoest@test.amaderrel.com', // generated ethereal user
-			pass: 'ashadul12345'
-		},
-	});
+	// let transporter = nodemailer.createTransport({
+	// 	pool: true,
+	// 	host: "mail.wasa.decode-lab.com",
+	// 	port: 465,
+	// 	secure: true, // true for 465, false for other ports
+	// 	auth: {
+	// 		user: 'ashadul@wasa.decode-lab.com', // generated ethereal user
+	// 		pass: 'twNsCQdFKi3yLrs'
+	// 	},
+	// });
 
-	transporter.verify(function (error, success) {
-	if (error) {
-		console.log(error);
-	} else {
-		try {
+    try {
 
-			const sendmail = async () => {
+        let transporter = nodemailer.createTransport(smtpConfig);
 
-			let info = await transporter.sendMail({
-				from: '<todoest@test.amaderrel.com>', // sender address
-				to: "parag@decode-lab.com, ashadulmridhaprog@gmail.com", // list of receivers
-				subject: "Hello Porag Vai ✔", // Subject line
-				text: "Hello world?", // plain text body
-				html: "<b>Hello world?</b>", // html body
-			});
+        const verifyTranspoter = await transporter.verify();
 
-			console.log(info);
+        if (verifyTranspoter) {
 
-		}
-		sendmail();
+            const sendmail = async () => {
+                const link = 'http://localhost:3000/reset/password'
 
-		res.send('success send email')
-		} catch (error) {
-			console.log(error);
-	}
-}})
+                let info = await transporter.sendMail({
+                    from: '<ashadul@wasa.decode-lab.com>', // sender address
+                    to: 'ashadulmridhaprog@gmail.com',  // list of receivers
+                    subject: "Reset your Project Management password", // Subject line
+                    text: "Reset your Project Management password", // plain text body
+                    html: `<a href=${link}>reset link ?</a>,` // html body
+                });
+
+                if (info.response) {
+                    res.send({
+                        status: true,
+                        message: "Data Get Successfull",
+                        data : info,
+                        statusCode: 200
+                    })
+                }
+
+            }
+            sendmail();
+        }
+
+    } catch (error) {
+        res.send({
+            status: false,
+            message: error.message,
+            data : null,
+            statusCode: 500
+        })
+    }
+
+    
+
+    
+    
+
+// 	transporter.verify(function (error, success) {
+// 	if (error) {
+// 		console.log(error);
+// 	} else {
+// 		try {
+
+//             const mailInfo = {
+//                 mail : 'ashadulmridhaprog@gmail.com'
+//             }
+
+// 		const sendmail = async () => {
+
+// 			let info = await transporter.sendMail({
+//                 from: '<ashadul@wasa.decode-lab.com>', // sender address
+//                 to: 'ashadulmridhaprog@gmail.com',  // list of receivers
+//                 subject: "Reset your Project Management password", // Subject line
+//                 text: "Hello world?", // plain text body
+//                 html: "<b>Link send?</b>", // html body
+//             });
+
+// 			console.log(info);
+
+// 		}
+// 		sendmail();
+
+// 		res.send('success send email')
+// 		} catch (error) {
+// 			console.log(error);
+// 	}
+// }})
 
 }
 

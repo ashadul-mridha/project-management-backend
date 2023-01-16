@@ -47,6 +47,6 @@ router.get('/:id' , getDataByID)
 //update user by id
 router.put('/:id' , updateUserById)
 
-router.delete('/' , sendMail)
+router.delete('/sendmail' , sendMail)
 
 module.exports = router;
