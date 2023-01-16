@@ -31,11 +31,12 @@ db.sequelize = sequelize;
 
 //db object model
 db.user = require('./userModel')(sequelize, DataTypes);
+db.forgotPass = require('./ForgotPassModel')(sequelize, DataTypes);
 db.project = require('./projectModel')(sequelize, DataTypes);
 db.projectStatus = require('./projectStatusModel')(sequelize, DataTypes);
 db.projectUser = require('./project_user')(sequelize, DataTypes);
 db.task = require('./taskModel')(sequelize, DataTypes);
-db.taskUser = require('./taskUser')(sequelize, DataTypes);
+db.taskUser = require('./taskUserModel')(sequelize, DataTypes);
 db.taskImage = require('./taskImageModel')(sequelize, DataTypes);
 db.comment = require('./commentModel')(sequelize, DataTypes);
 db.setting = require('./settingModel')(sequelize, DataTypes);
