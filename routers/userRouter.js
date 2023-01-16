@@ -6,6 +6,7 @@ const{
     registrationUser,
     loginUser,
     forgotPassword,
+    resetPassword,
     getAllData,
     getDataByID,
     updateUserById,
@@ -25,6 +26,8 @@ router.post('/registration' , registrationUser)
 router.post('/login' , loginUser)
 // forgot password
 router.post('/forgot/password' , forgotPassword)
+// reset password
+router.post('/reset/password' , resetPassword)
 //get all user
 router.get('/' , getAllData)
 //get all project by user

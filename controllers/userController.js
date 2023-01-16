@@ -3,6 +3,7 @@ const { Op } = require("sequelize");
 const path = require("path");
 const fs = require("fs");
 const bcrypt = require('bcrypt');
+const CryptoJS = require("crypto-js");
 const jwt = require("jsonwebtoken");
 const uploadFolder = path.join( __dirname , '/../public/images/uploads/user');
 const nodemailer = require("nodemailer");
@@ -17,750 +18,805 @@ const Task = db.task;
 const TaskImage = db.taskImage;
 const TaskUser = db.taskUser;
 
+// crypto secreate
+const cryptoSecret = process.env.CRYPTO_SECRET;
+
 //const add new hero section data
 const registrationUser = async (req,res) => {
-    try {
+		try {
 
-        //find user have or not
-        const findUser = await User.findOne({ where : {email: req.body.email}})
+				//find user have or not
+				const findUser = await User.findOne({ where : {email: req.body.email}})
 
-        if (findUser) {
-            res.status(409).send({
-                status: false,
-                message: "use another email this email used before",
-                data: null,
-                statusCode: 409
-            })
-        } else{
+				if (findUser) {
+						res.status(409).send({
+								status: false,
+								message: "use another email this email used before",
+								data: null,
+								statusCode: 409
+						})
+				} else{
 
-            // password generated hashed
-            const hashedPassword = await bcrypt.hash(req.body.password, 10);
+						// password generated hashed
+						const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
-            //upload image to server and get name
-            let finalFileName;
+						//upload image to server and get name
+						let finalFileName;
 
-            if (req.files) {
-            //get files
-            const imageFile = req.files.image;
-            const UploadedFilName = imageFile.name;
+						if (req.files) {
+						//get files
+						const imageFile = req.files.image;
+						const UploadedFilName = imageFile.name;
 
-            const fileExt = path.extname(UploadedFilName);
-            const fileNameWithoutExt =
-                UploadedFilName
-                .replace(fileExt, "")
-                .toLowerCase()
-                .split(" ")
-                .join("-") +
-                "-" +
-                Date.now();
+						const fileExt = path.extname(UploadedFilName);
+						const fileNameWithoutExt =
+								UploadedFilName
+								.replace(fileExt, "")
+								.toLowerCase()
+								.split(" ")
+								.join("-") +
+								"-" +
+								Date.now();
 
-            finalFileName = fileNameWithoutExt + fileExt;
+						finalFileName = fileNameWithoutExt + fileExt;
 
-            const uploadPath = `${uploadFolder}/${finalFileName}`;
+						const uploadPath = `${uploadFolder}/${finalFileName}`;
 
 
-            imageFile.mv( uploadPath , (err) => {
-                if (err) {
-                throw Error('File Not Uploaded')
-                }
-            })
+						imageFile.mv( uploadPath , (err) => {
+								if (err) {
+								throw Error('File Not Uploaded')
+								}
+						})
 
-            }
+						}
 
-            let data = {
-                name:req.body.name,
-                email:req.body.email,
-                password : hashedPassword,
-                userRole : req.body.userRole ? req.body.userRole : 'user',
-                phone:req.body.phone,
-                address:req.body.address,
-                image: finalFileName,
-                active: true
-                // active: req.body.active ? req.body.active : false
-            }
+						let data = {
+								name:req.body.name,
+								email:req.body.email,
+								password : hashedPassword,
+								userRole : req.body.userRole ? req.body.userRole : 'user',
+								phone:req.body.phone,
+								address:req.body.address,
+								image: finalFileName,
+								active: true
+								// active: req.body.active ? req.body.active : false
+						}
 
-            //inset about us data
-            const newUserData = await User.create(data);
+						//inset about us data
+						const newUserData = await User.create(data);
 
-            res.status(200).send({
-                status: true,
-                message: "Data Added Successfull",
-                data : newUserData,
-                statusCode: 200
-            })
-        }
+						res.status(200).send({
+								status: true,
+								message: "Data Added Successfull",
+								data : newUserData,
+								statusCode: 200
+						})
+				}
 
-      
 
-    } catch (error) {
-        res.send({
-          status: false,
-          message: error.message,
-          data : null,
-          statusCode: 500
-        }) 
-    }
+
+		} catch (error) {
+				res.send({
+					status: false,
+					message: error.message,
+					data : null,
+					statusCode: 500
+				})
+		}
 }
 
 //login user
  const loginUser =  async (req, res) => {
 
-  try {
-    // find a user who has this email/username
-    const user = await User.findOne({ where : {email: req.body.email , active : true}})
+	try {
+		// find a user who has this email/username
+		const user = await User.findOne({ where : {email: req.body.email , active : true}})
 
-    if (user && user.id) {
+		if (user && user.id) {
 
-      const isValidPassword = await bcrypt.compare(
-        req.body.password,
-        user.password
-      );
+			const isValidPassword = await bcrypt.compare(
+				req.body.password,
+				user.password
+			);
 
-      if (isValidPassword) {
-        // prepare the user object to generate token
-        const userObject = {
-          userid: user.id,
-          name: user.name,
-          email: user.email,
-          image: user.image,
-          userRole: user.userRole
-        };
+			if (isValidPassword) {
+				// prepare the user object to generate token
+				const userObject = {
+					userid: user.id,
+					name: user.name,
+					email: user.email,
+					image: user.image,
+					userRole: user.userRole
+				};
 
-        // generate token
-        const token = jwt.sign(userObject, process.env.JWT_SECRET, {
-          expiresIn: process.env.JWT_EXPIRY,
-        });
+				// generate token
+				const token = jwt.sign(userObject, process.env.JWT_SECRET, {
+					expiresIn: process.env.JWT_EXPIRY,
+				});
 
-        const data ={ ...userObject , jwtToken: token }
+				const data ={ ...userObject , jwtToken: token }
 
-        res.send({
-            status: true,
-            message: "data fetch successfull",
-            data : data,
-            statusCode: 200
-        })
+				res.send({
+						status: true,
+						message: "data fetch successfull",
+						data : data,
+						statusCode: 200
+				})
 
-      } else {
-        res.send({
-            status: false,
-            message: "Login failed! Please try again.",
-            data : null,
-            statusCode: 500
-        })
-      }
-    } else {
-      res.send({
-          status: false,
-          message: "Login failed! Please try again.",
-          data : null,
-          statusCode: 500
-      })
-    }
-  } catch (err) {
-    
-    res.send({
-        status: false,
-        message: err?.message,
-        data : null,
-        statusCode: 500
-    })
+			} else {
+				res.send({
+						status: false,
+						message: "Login failed! Please try again.",
+						data : null,
+						statusCode: 500
+				})
+			}
+		} else {
+			res.send({
+					status: false,
+					message: "Login failed! Please try again.",
+					data : null,
+					statusCode: 500
+			})
+		}
+	} catch (err) {
 
-  }
+		res.send({
+				status: false,
+				message: err?.message,
+				data : null,
+				statusCode: 500
+		})
+
+	}
 
 }
 
 //forgot password email come
 const forgotPassword = async (req, res) => {
 
-  try {
-    // find a user who has this email/username
-    const user = await User.findOne({ where : {email: req.body.email , active : true}})
+	try {
+		// find a user who has this email/username
+		const user = await User.findOne({ where : {email: req.body.email , active : true}})
 
-    if (user && user.id) {
+		if (user && user.id) {
 
-      //  generated random string
-      const randomStr = (Math.random() * 5).toString(36).substring(2);
-      //generated random string hashed
-      const hashedRandomString = await bcrypt.hash(randomStr, 10);
+			//  generated random string
+			const randomStr = (Math.random() * 5).toString(36).substring(2);
+			//generated random string hashed
+			const hashedRandomString =CryptoJS.AES.encrypt(randomStr , cryptoSecret ).toString();
 
-      // genarate expaire time current time + 30 minutes
-      const expaireTime =  new Date( new Date().getTime() + 30 * 60000);
+			// genarate expaire time current time + 30 minutes
+			const expaireTime =  new Date( new Date().getTime() + 30 * 60000);
 
-      const insertData = {
-        userId : user.id,
-        token: randomStr,
-        expaireIn : expaireTime
-      }
-      
-      // genarate reset password link
-      const resetPasswordLink = `http://localhost:3000/reset/password?reset_token=${hashedRandomString}`
+			const insertData = {
+				userId : user.id,
+				token: randomStr,
+				expaireIn : expaireTime
+			}
 
-      //find user request before or not
-      const findForgotPassAvailable = await ForgotPass.findOne({ where : { userId: user.id }});
+			// genarate reset password link
+			const resetPasswordLink = `http://localhost:3000/reset/password?reset_token=${hashedRandomString}`
 
-      if (findForgotPassAvailable) {
+			//find user request before or not
+			const findForgotPassAvailable = await ForgotPass.findOne({ where : { userId: user.id }});
 
-        const forgotDatainsert = await ForgotPass.update( insertData , {
-            where: { id : findForgotPassAvailable.id }
-        });
+			if (findForgotPassAvailable) {
 
-        if (forgotDatainsert) {
+				const forgotDatainsert = await ForgotPass.update( insertData , {
+						where: { id : findForgotPassAvailable.id }
+				});
 
-          res.send({
-              status: true,
-              message: "email sent successfull",
-              data : resetPasswordLink,
-              statusCode: 200
-          })
+				if (forgotDatainsert) {
 
-        }
-      } else {
+					res.send({
+							status: true,
+							message: "email sent successfull",
+							data : resetPasswordLink,
+							statusCode: 200
+					})
 
-        const forgotDatainsert = await ForgotPass.create( insertData );
+				}
+			} else {
 
-        if (forgotDatainsert) {
+				const forgotDatainsert = await ForgotPass.create( insertData );
 
-          res.send({
-              status: true,
-              message: "email sent successfull",
-              data : resetPasswordLink,
-              statusCode: 200
-          })
+				if (forgotDatainsert) {
 
-        }
+					res.send({
+							status: true,
+							message: "email sent successfull",
+							data : resetPasswordLink,
+							statusCode: 200
+					})
 
-    }
-    }  else {
-      
-        res.send({
-            status: false,
-            message: "email was wrong! Please try again.",
-            data : null,
-            statusCode: 500
-        })
+				}
 
-    }
-  } catch (err) {
-    
-    res.send({
-        status: false,
-        message: err?.message,
-        data : null,
-        statusCode: 500
-    })
+		}
+		}  else {
 
-  }
+				res.send({
+						status: false,
+						message: "email was wrong! Please try again.",
+						data : null,
+						statusCode: 500
+				})
 
+		}
+	} catch (err) {
+
+		res.send({
+				status: false,
+				message: err?.message,
+				data : null,
+				statusCode: 500
+		})
+
+	}
+
+}
+
+//reset password
+const resetPassword = async ( req, res) => {
+	try {
+
+		// decrypt token
+		const  token  = CryptoJS.AES.decrypt( req.body.token , cryptoSecret).toString(CryptoJS.enc.Utf8);
+
+		//find token user
+		const tokenUser = await ForgotPass.findOne({ where : {token: token}});
+
+		if (tokenUser && tokenUser.userId) {
+
+			// password generated hashed
+			const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
+			const updateData = { password: hashedPassword}
+
+			const tokenUserPassChange = await User.update( updateData , {
+				where: { id : tokenUser.userId }
+			});
+
+				res.send({
+                    status: true,
+                    message: "password reset successfull",
+                    data : tokenUserPassChange,
+                    statusCode: 200
+				})
+
+		} else {
+
+			res.send({
+                status: true,
+                message: "token was invalid",
+                data : token,
+                statusCode: 200
+			})
+
+		}
+
+	} catch (error) {
+
+		res.send({
+				status: false,
+				message: error?.message,
+				data : null,
+				statusCode: 500
+		})
+
+	}
 }
 
 //get all data
 const getAllData = async (req, res) => {
-    try {
-        const data = await User.findAll({
-          attributes: ['id', 'name', 'phone', 'address', 'email', 'userRole','image', 'active', 'createdAt'],
-          where: {
-            email: {
-              [Op.not]: 'admin@gmail.com'
-            }
-          }
-        });
+		try {
+				const data = await User.findAll({
+					attributes: ['id', 'name', 'phone', 'address', 'email', 'userRole','image', 'active', 'createdAt'],
+					where: {
+						email: {
+							[Op.not]: 'admin@gmail.com'
+						}
+					}
+				});
 
-        res.send({
-          status: true,
-          message: "Data Get Successfull",
-          data : data,
-          statusCode: 200
-        })
+				res.send({
+					status: true,
+					message: "Data Get Successfull",
+					data : data,
+					statusCode: 200
+				})
 
-    } catch (error) {
-        res.send({
-          status: false,
-          message: error.message,
-          data : null,
-          statusCode: 500
-        })
-    }
+		} catch (error) {
+				res.send({
+					status: false,
+					message: error.message,
+					data : null,
+					statusCode: 500
+				})
+		}
 }
 
 //get user by id include project
 const getDataByID = async (req, res) => {
-    try {
-        const {id} = req.params;
+		try {
+				const {id} = req.params;
 
-        const data = await User.findOne({
-          where : { id : id},
-          attributes: ['id' ,'name', 'phone', 'address', 'email', 'userRole','image', 'active'],
-        });
+				const data = await User.findOne({
+					where : { id : id},
+					attributes: ['id' ,'name', 'phone', 'address', 'email', 'userRole','image', 'active'],
+				});
 
-        res.send({
-          status: true,
-          message: "Data Get Successfull",
-          data : data,
-          statusCode: 200
-        })
+				res.send({
+					status: true,
+					message: "Data Get Successfull",
+					data : data,
+					statusCode: 200
+				})
 
-    } catch (error) {
-        res.send({
-          status: false,
-          message: error.message,
-          data : null,
-          statusCode: 500
-        })
-    }
+		} catch (error) {
+				res.send({
+					status: false,
+					message: error.message,
+					data : null,
+					statusCode: 500
+				})
+		}
 }
 
 //Update single data by using id
 const updateUserById = async (req,res) => {
-    try {
-        //update id
-        const {id} = req.params;
+		try {
+				//update id
+				const {id} = req.params;
 
-        const storedData = await User.findOne({ where : {id: id}})
-        let finalFileName = storedData.image;
+				const storedData = await User.findOne({ where : {id: id}})
+				let finalFileName = storedData.image;
 
-        //delete and store new image
-        if(req.files){
+				//delete and store new image
+				if(req.files){
 
-            //deleted 1st image
-            fs.unlink(`${uploadFolder}/${storedData.image}`, (err) => {
-              if(err){
-                throw Error('Image Not Deleted')
-              } else {
-                console.log('img deleted');
-              }
-            })
+						//deleted 1st image
+						fs.unlink(`${uploadFolder}/${storedData.image}`, (err) => {
+							if(err){
+								throw Error('Image Not Deleted')
+							} else {
+								console.log('img deleted');
+							}
+						})
 
-            //store new image
+						//store new image
 
-            //get files
-            const imageFile = req.files.image;
-            const UploadedFilName = imageFile.name;
+						//get files
+						const imageFile = req.files.image;
+						const UploadedFilName = imageFile.name;
 
-            const fileExt = path.extname(UploadedFilName);
-            const fileNameWithoutExt =
-            UploadedFilName
-                .replace(fileExt, "")
-                .toLowerCase()
-                .split(" ")
-                .join("-") +
-            "-" +
-            Date.now();
+						const fileExt = path.extname(UploadedFilName);
+						const fileNameWithoutExt =
+						UploadedFilName
+								.replace(fileExt, "")
+								.toLowerCase()
+								.split(" ")
+								.join("-") +
+						"-" +
+						Date.now();
 
-            finalFileName = fileNameWithoutExt + fileExt;
+						finalFileName = fileNameWithoutExt + fileExt;
 
-            const uploadPath = `${uploadFolder}/${finalFileName}`;
+						const uploadPath = `${uploadFolder}/${finalFileName}`;
 
-            imageFile.mv( uploadPath , (err) => {
-                if (err) {
-                    throw Error('File Not Uploaded')
-                }else {
-                    console.log('file uploaded');
-                }
-            })
+						imageFile.mv( uploadPath , (err) => {
+								if (err) {
+										throw Error('File Not Uploaded')
+								}else {
+										console.log('file uploaded');
+								}
+						})
 
-        }
+				}
 
-        const uploadData = {
-          name : req.body.name,
-          phone: req.body.phone,
-          email: req.body.email,
-          address: req.body.address,
-          image : finalFileName,
-          active: req.body.active,
-          userRole : req.body.userRole,
-        }
+				const uploadData = {
+					name : req.body.name,
+					phone: req.body.phone,
+					email: req.body.email,
+					address: req.body.address,
+					image : finalFileName,
+					active: req.body.active,
+					userRole : req.body.userRole,
+				}
 
 
 
-        //update data
-        const data = await User.update( uploadData , { where : {id: id}})
-        
-        res.send({
-          status: true,
-          message: "Data Update Successfull",
-          data : data,
-          statusCode: 200
-        })
+				//update data
+				const data = await User.update( uploadData , { where : {id: id}})
 
-    } catch (error) {
-        res.send({
-          status: false,
-          message: error.message,
-          data : null,
-          statusCode: 500
-        }) 
-    }
+				res.send({
+					status: true,
+					message: "Data Update Successfull",
+					data : data,
+					statusCode: 200
+				})
+
+		} catch (error) {
+				res.send({
+					status: false,
+					message: error.message,
+					data : null,
+					statusCode: 500
+				})
+		}
 }
 
 
 //get user by id include project
 const getProjectByUserID = async (req, res) => {
-    try {
+		try {
 
-        const data = await User.findOne({
-          where : { id : req.user.id},
-          attributes: ['id' ,'name', 'email', 'userRole','image'],
-          include:[
-            {
-              model: Project, 
-              order: [
-                ["id", "ASC"],
-              ],
-              attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']}, 
-              include:[{
-                model: ProjectStatus ,
-                order: [
-                  ["id", "ASC"],
-                ],
-                separate: true,
-                attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
-                include : [{
-                  model: Task,
-                  include : [{
-                    model: TaskUser,
-                    where: {
-                        userId: req.user.id
-                    },
-                    include : [{
-                      model: Task,
-                      attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
-                      
-                    }],
-                    attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
-                    
-                  }],
-                  attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
-                  
-                }]
-              }]
-            }
-          ]
-        });
+				const data = await User.findOne({
+					where : { id : req.user.id},
+					attributes: ['id' ,'name', 'email', 'userRole','image'],
+					include:[
+						{
+							model: Project,
+							order: [
+								["id", "ASC"],
+							],
+							attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+							include:[{
+								model: ProjectStatus ,
+								order: [
+									["id", "ASC"],
+								],
+								separate: true,
+								attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+								include : [{
+									model: Task,
+									include : [{
+										model: TaskUser,
+										where: {
+												userId: req.user.id
+										},
+										include : [{
+											model: Task,
+											attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
 
-        res.send({
-          status: true,
-          message: "Data Get Successfull",
-          data : data,
-          statusCode: 200
-        })
+										}],
+										attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
 
-    } catch (error) {
-        res.send({
-          status: false,
-          message: error.message,
-          data : null,
-          statusCode: 500
-        })
-    }
+									}],
+									attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+
+								}]
+							}]
+						}
+					]
+				});
+
+				res.send({
+					status: true,
+					message: "Data Get Successfull",
+					data : data,
+					statusCode: 200
+				})
+
+		} catch (error) {
+				res.send({
+					status: false,
+					message: error.message,
+					data : null,
+					statusCode: 500
+				})
+		}
 }
 
 //get user by id include meeting
 const getMeetingByUserID = async (req, res) => {
-    try {
+		try {
 
-        const data = await User.findOne({
-          where : { id : req.user.id},
-          attributes: ['id' ,'name', 'email', 'userRole','image'],
-          include:[
-            {
-              model: Meeting, 
-              order: [
-                ["id", "ASC"],
-              ],
-              attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
-              include :[
-              {
-                  model: User,
-                  attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
-              }
-            ] 
-            }
-          ]
-        });
+				const data = await User.findOne({
+					where : { id : req.user.id},
+					attributes: ['id' ,'name', 'email', 'userRole','image'],
+					include:[
+						{
+							model: Meeting,
+							order: [
+								["id", "ASC"],
+							],
+							attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+							include :[
+							{
+									model: User,
+									attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+							}
+						]
+						}
+					]
+				});
 
-        res.send({
-          status: true,
-          message: "Data Get Successfull",
-          data : data,
-          statusCode: 200
-        })
+				res.send({
+					status: true,
+					message: "Data Get Successfull",
+					data : data,
+					statusCode: 200
+				})
 
-    } catch (error) {
-        res.send({
-          status: false,
-          message: error.message,
-          data : null,
-          statusCode: 500
-        })
-    }
+		} catch (error) {
+				res.send({
+					status: false,
+					message: error.message,
+					data : null,
+					statusCode: 500
+				})
+		}
 }
 
 
 //get user by id include project
 const getProjectBySlugAndUserID = async (req, res) => {
-    try {
+		try {
 
-      
-        const {slug} = req.params;
 
-        const data = await User.findOne({
-          where : { id : req.user.id},
-          attributes: ['id' ,'name', 'email', 'userRole','image'],
-          include:[
-            {
-              model: Project, 
-              where: {
-                slug: slug
-              },
-              order: [
-                ["id", "ASC"],
-              ],
-              attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']}, 
-              include:[{
-                model: ProjectStatus ,
-                order: [
-                  ["id", "ASC"],
-                ],
-                separate: true,
-                attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
-                include : [{
-                  model: Task,
-                  include : [{
-                    model: TaskUser,
-                    where: {
-                        userId: req.user.id
-                    },
-                    include : [{
-                      model: Task,
-                      attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
-                      
-                    }],
-                    attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
-                    
-                  }],
-                  attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
-                  
-                }]
-              }]
-            }
-          ]
-        });
+				const {slug} = req.params;
 
-        res.send({
-          status: true,
-          message: "Data Get Successfull",
-          data : data,
-          statusCode: 200
-        })
+				const data = await User.findOne({
+					where : { id : req.user.id},
+					attributes: ['id' ,'name', 'email', 'userRole','image'],
+					include:[
+						{
+							model: Project,
+							where: {
+								slug: slug
+							},
+							order: [
+								["id", "ASC"],
+							],
+							attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+							include:[{
+								model: ProjectStatus ,
+								order: [
+									["id", "ASC"],
+								],
+								separate: true,
+								attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+								include : [{
+									model: Task,
+									include : [{
+										model: TaskUser,
+										where: {
+												userId: req.user.id
+										},
+										include : [{
+											model: Task,
+											attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
 
-    } catch (error) {
-        res.send({
-          status: false,
-          message: error.message,
-          data : null,
-          statusCode: 500
-        })
-    }
+										}],
+										attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+
+									}],
+									attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+
+								}]
+							}]
+						}
+					]
+				});
+
+				res.send({
+					status: true,
+					message: "Data Get Successfull",
+					data : data,
+					statusCode: 200
+				})
+
+		} catch (error) {
+				res.send({
+					status: false,
+					message: error.message,
+					data : null,
+					statusCode: 500
+				})
+		}
 }
 
 //get tasks by user id
 const getTaskByUserID = async (req, res) => {
-    try {
-        // const {id} = req.params;
+		try {
+				// const {id} = req.params;
 
-        const data = await User.findOne({
-          where : { id : req.user.id},
-          attributes: ['id' ,'name', 'email', 'userRole','image'],
-          include:[{
-            model: Task, 
-            attributes: {
-              include: [ 'id','name', 'slug','desc', 'priority', 'remain']
-            } , 
-            include :[
-              {
-                model: TaskImage,
-                attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
-              },
-              {
-                  model: User,
-                  attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
-              }
-            ] 
-          }]
-        });
+				const data = await User.findOne({
+					where : { id : req.user.id},
+					attributes: ['id' ,'name', 'email', 'userRole','image'],
+					include:[{
+						model: Task,
+						attributes: {
+							include: [ 'id','name', 'slug','desc', 'priority', 'end_time']
+						} ,
+						include :[
+							{
+								model: TaskImage,
+								attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+							},
+							{
+									model: User,
+									attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+							}
+						]
+					}]
+				});
 
-        res.send({
-          status: true,
-          message: "Data Get Successfull",
-          data : data,
-          statusCode: 200
-        })
+				res.send({
+					status: true,
+					message: "Data Get Successfull",
+					data : data,
+					statusCode: 200
+				})
 
-    } catch (error) {
-        res.send({
-          status: false,
-          message: error.message,
-          data : null,
-          statusCode: 500
-        })
-    }
+		} catch (error) {
+				res.send({
+					status: false,
+					message: error.message,
+					data : null,
+					statusCode: 500
+				})
+		}
 }
 
 
 //get today tasks by user id
 const getTodayTaskByUserID = async (req, res) => {
-    try {
-        // const {id} = req.params;
+		try {
+				// const {id} = req.params;
 
-        const data = await User.findOne({
-          where : { id : req.user.id},
-          attributes: ['id' ,'name', 'email', 'userRole','image'],
-          include:[{
-            model: Task, 
-            where : {
-              remain : {
-                [Op.lt]: new Date(),
-                [Op.gt]: new Date(new Date() - 24 * 60 * 60 * 1000)
-              }
-            },
-            attributes: {
-              include: [ 'id','name', 'slug','desc', 'priority', 'remain']
-            } , 
-            include :[
-              {
-                model: TaskImage,
-                attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
-              },
-              {
-                  model: User,
-                  attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
-              }
-            ] 
-          }]
-        });
+				const data = await User.findOne({
+					where : { id : req.user.id},
+					attributes: ['id' ,'name', 'email', 'userRole','image'],
+					include:[{
+						model: Task,
+						where : {
+							end_time : {
+								[Op.lt]: new Date(),
+								[Op.gt]: new Date(new Date() - 24 * 60 * 60 * 1000)
+							}
+						},
+						attributes: {
+							include: [ 'id','name', 'slug','desc', 'priority', 'end_time']
+						} ,
+						include :[
+							{
+								model: TaskImage,
+								attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+							},
+							{
+									model: User,
+									attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+							}
+						]
+					}]
+				});
 
-        res.send({
-          status: true,
-          message: "Data Get Successfull",
-          data : data,
-          statusCode: 200
-        })
+				res.send({
+					status: true,
+					message: "Data Get Successfull",
+					data : data,
+					statusCode: 200
+				})
 
-    } catch (error) {
-        res.send({
-          status: false,
-          message: error.message,
-          data : null,
-          statusCode: 500
-        })
-    }
+		} catch (error) {
+				res.send({
+					status: false,
+					message: error.message,
+					data : null,
+					statusCode: 500
+				})
+		}
 }
 
 //get today tasks by user id
 const getUpcommingTaskByUserID = async (req, res) => {
-    try {
-        // const {id} = req.params;
+		try {
+				// const {id} = req.params;
 
-        const data = await User.findOne({
-          where : { id : req.user.id},
-          attributes: ['id' ,'name', 'email', 'userRole','image'],
-          include:[{
-            model: Task, 
-            where : {
-              remain : {
-                [Op.gt]: new Date()
-              }
-            },
-            attributes: {
-              include: [ 'id','name', 'slug','desc', 'priority', 'remain']
-            } , 
-            include :[
-              {
-                model: TaskImage,
-                attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
-              },
-              {
-                  model: User,
-                  attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
-              }
-            ] 
-          }]
-        });
+				const data = await User.findOne({
+					where : { id : req.user.id},
+					attributes: ['id' ,'name', 'email', 'userRole','image'],
+					include:[{
+						model: Task,
+						where : {
+							end_time : {
+								[Op.gt]: new Date()
+							}
+						},
+						attributes: {
+							include: [ 'id','name', 'slug','desc', 'priority', 'end_time']
+						} ,
+						include :[
+							{
+								model: TaskImage,
+								attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+							},
+							{
+									model: User,
+									attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+							}
+						]
+					}]
+				});
 
-        res.send({
-          status: true,
-          message: "Data Get Successfull",
-          data : data,
-          statusCode: 200
-        })
+				res.send({
+					status: true,
+					message: "Data Get Successfull",
+					data : data,
+					statusCode: 200
+				})
 
-    } catch (error) {
-        res.send({
-          status: false,
-          message: error.message,
-          data : null,
-          statusCode: 500
-        })
-    }
+		} catch (error) {
+				res.send({
+					status: false,
+					message: error.message,
+					data : null,
+					statusCode: 500
+				})
+		}
 }
 
 //send mail ok
 const sendMail = async (req, res) => {
-  
 
-  let transporter = nodemailer.createTransport({
-    pool: true,
-    host: "mail.test.amaderrel.com",
-    port: 465,
-    secure: true, // true for 465, false for other ports
-    auth: {
-      user: 'todoest@test.amaderrel.com', // generated ethereal user
-      pass: 'ashadul12345'
-    },
-  });
 
-  transporter.verify(function (error, success) {
-  if (error) {
-    console.log(error);
-  } else {
-    try {
-      
-      const sendmail = async () => {
+	let transporter = nodemailer.createTransport({
+		pool: true,
+		host: "mail.test.amaderrel.com",
+		port: 465,
+		secure: true, // true for 465, false for other ports
+		auth: {
+			user: 'todoest@test.amaderrel.com', // generated ethereal user
+			pass: 'ashadul12345'
+		},
+	});
 
-      let info = await transporter.sendMail({
-        from: '<todoest@test.amaderrel.com>', // sender address
-        to: "parag@decode-lab.com, ashadulmridhaprog@gmail.com", // list of receivers
-        subject: "Hello Porag Vai ✔", // Subject line
-        text: "Hello world?", // plain text body
-        html: "<b>Hello world?</b>", // html body
-      });
+	transporter.verify(function (error, success) {
+	if (error) {
+		console.log(error);
+	} else {
+		try {
 
-      console.log(info);
+			const sendmail = async () => {
 
-    }
-    sendmail();
-    
-    res.send('success send email')
-    } catch (error) {
-      console.log(error);
-  }
+			let info = await transporter.sendMail({
+				from: '<todoest@test.amaderrel.com>', // sender address
+				to: "parag@decode-lab.com, ashadulmridhaprog@gmail.com", // list of receivers
+				subject: "Hello Porag Vai ✔", // Subject line
+				text: "Hello world?", // plain text body
+				html: "<b>Hello world?</b>", // html body
+			});
+
+			console.log(info);
+
+		}
+		sendmail();
+
+		res.send('success send email')
+		} catch (error) {
+			console.log(error);
+	}
 }})
-  
+
 }
 
 
 module.exports = {
-    registrationUser,
-    loginUser,
-    forgotPassword,
-    getAllData,
-    getDataByID,
-    updateUserById,
-    getProjectByUserID,
-    getMeetingByUserID,
-    getProjectBySlugAndUserID,
-    getTaskByUserID,
-    getTodayTaskByUserID,
-    getUpcommingTaskByUserID,
-    sendMail
+		registrationUser,
+		loginUser,
+		forgotPassword,
+		resetPassword,
+		getAllData,
+		getDataByID,
+		updateUserById,
+		getProjectByUserID,
+		getMeetingByUserID,
+		getProjectBySlugAndUserID,
+		getTaskByUserID,
+		getTodayTaskByUserID,
+		getUpcommingTaskByUserID,
+		sendMail
 }
