@@ -5,6 +5,7 @@ const router = require('express').Router();
 const{
     registrationUser,
     loginUser,
+    forgotPassword,
     getAllData,
     getDataByID,
     updateUserById,
@@ -22,6 +23,8 @@ const { checkLogin } = require('../middlewares/common/checkAuthorization');
 router.post('/registration' , registrationUser)
 //login new user
 router.post('/login' , loginUser)
+// forgot password
+router.post('/forgot/password' , forgotPassword)
 //get all user
 router.get('/' , getAllData)
 //get all project by user

@@ -9,6 +9,7 @@ const nodemailer = require("nodemailer");
 
 //Import model
 const User = db.user;
+const ForgotPass = db.forgotPass;
 const Meeting = db.meeting;
 const Project = db.project;
 const ProjectStatus = db.projectStatus;
@@ -165,6 +166,91 @@ const registrationUser = async (req,res) => {
     })
 
   }
+
+}
+
+//forgot password email come
+const forgotPassword = async (req, res) => {
+
+  try {
+    // find a user who has this email/username
+    const user = await User.findOne({ where : {email: req.body.email , active : true}})
+
+    if (user && user.id) {
+
+      //  generated random string
+      const randomStr = (Math.random() * 5).toString(36).substring(2);
+      //generated random string hashed
+      const hashedRandomString = await bcrypt.hash(randomStr, 10);
+
+      // genarate expaire time current time + 30 minutes
+      const expaireTime =  new Date( new Date().getTime() + 30 * 60000);
+
+      const insertData = {
+        userId : user.id,
+        token: randomStr,
+        expaireIn : expaireTime
+      }
+      
+      // genarate reset password link
+      const resetPasswordLink = `http://localhost:3000/reset/password?reset_token=${hashedRandomString}`
+
+      //find user request before or not
+      const findForgotPassAvailable = await ForgotPass.findOne({ where : { userId: user.id }});
+
+      if (findForgotPassAvailable) {
+
+        const forgotDatainsert = await ForgotPass.update( insertData , {
+            where: { id : findForgotPassAvailable.id }
+        });
+
+        if (forgotDatainsert) {
+
+          res.send({
+              status: true,
+              message: "email sent successfull",
+              data : resetPasswordLink,
+              statusCode: 200
+          })
+
+        }
+      } else {
+
+        const forgotDatainsert = await ForgotPass.create( insertData );
+
+        if (forgotDatainsert) {
+
+          res.send({
+              status: true,
+              message: "email sent successfull",
+              data : resetPasswordLink,
+              statusCode: 200
+          })
+
+        }
+
+    }
+    }  else {
+      
+        res.send({
+            status: false,
+            message: "email was wrong! Please try again.",
+            data : null,
+            statusCode: 500
+        })
+
+    }
+  } catch (err) {
+    
+    res.send({
+        status: false,
+        message: err?.message,
+        data : null,
+        statusCode: 500
+    })
+
+  }
+
 }
 
 //get all data
@@ -666,6 +752,7 @@ const sendMail = async (req, res) => {
 module.exports = {
     registrationUser,
     loginUser,
+    forgotPassword,
     getAllData,
     getDataByID,
     updateUserById,
