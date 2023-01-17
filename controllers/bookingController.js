@@ -4,8 +4,6 @@ const { Op } = require("sequelize");
 /* This is importing the models from the database. */
 const Booking = db.booking;
 const BookingUser = db.bookingUser;
-const Project = db.project;
-const ProjectUser = db.projectUser;
 const User = db.user;
 
 
@@ -33,11 +31,11 @@ const addData = async (req,res) => {
 
         /* Creating meeting table data with the properties of the request body. */
         const bookingData = {
-            title : req.body.title,
+            name : req.body.name,
             address : req.body.address,
             place : req.body.place,
-            startTime : req.body.startTime,
-            endTime : req.body.endTime,
+            startDate : req.body.startDate,
+            endDate : req.body.endDate,
             clientName : req.body.clientName,
             clientPhone : req.body.clientPhone,
             clientEmail : req.body.clientEmail,

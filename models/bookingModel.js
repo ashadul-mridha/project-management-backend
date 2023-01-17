@@ -5,7 +5,7 @@ module.exports = (sequelize , DataTypes) => {
             autoIncrement: true,
             primaryKey: true
         },
-        title: {
+        name: {
             type: DataTypes.STRING,
             allowNull: false
         },
@@ -17,11 +17,11 @@ module.exports = (sequelize , DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false
         },
-        startTime: {
+        startDate: {
             type: DataTypes.DATE,
             allowNull: true
         },
-        endTime: {
+        endDate: {
             type: DataTypes.DATE,
             allowNull: true
         },

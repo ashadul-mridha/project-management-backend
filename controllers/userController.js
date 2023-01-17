@@ -13,6 +13,7 @@ const smtpConfig = require("../config/smtpConfig");
 const User = db.user;
 const ForgotPass = db.forgotPass;
 const Meeting = db.meeting;
+const Booking = db.booking;
 const Project = db.project;
 const ProjectStatus = db.projectStatus;
 const Task = db.task;
@@ -742,6 +743,47 @@ const getMeetingByUserID = async (req, res) => {
 		}
 }
 
+//get user by id include booking
+const getBookingByUserID = async (req, res) => {
+		try {
+
+				const data = await User.findOne({
+					where : { id : req.user.id},
+					attributes: ['id' ,'name', 'email', 'userRole','image'],
+					include:[
+						{
+							model: Booking,
+							order: [
+								["id", "ASC"],
+							],
+							attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+							include :[
+							{
+									model: User,
+									attributes: {exclude: ['createdBy','updatedBy','deletedBy','createdAt','updatedAt','deletedAt']},
+							}
+						]
+						}
+					]
+				});
+
+				res.send({
+					status: true,
+					message: "Data Get Successfull",
+					data : data,
+					statusCode: 200
+				})
+
+		} catch (error) {
+				res.send({
+					status: false,
+					message: error.message,
+					data : null,
+					statusCode: 500
+				})
+		}
+}
+
 
 //get user by id include project
 const getProjectBySlugAndUserID = async (req, res) => {
@@ -1117,6 +1159,7 @@ module.exports = {
 		updateUserById,
 		getProjectByUserID,
 		getMeetingByUserID,
+		getBookingByUserID,
 		getProjectBySlugAndUserID,
 		getTaskByUserID,
 		getTodayTaskByUserID,
