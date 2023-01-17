@@ -13,6 +13,7 @@ const taskImageRouter = require('./routers/taskImageRouter');
 const settingRouter = require('./routers/settingRouter');
 const commentRouter = require('./routers/commentRouter');
 const meetingRouter = require('./routers/meetingRouter');
+const bookingRouter = require('./routers/bookingRouter');
 
 //import middleware
 const { notFoundhandler,  defaultErrorHandler } = require('./middlewares/common/errorHandler');
@@ -40,6 +41,7 @@ app.use('/api/task/image' , taskImageRouter);
 app.use('/api/setting' , settingRouter);
 app.use('/api/comment' , commentRouter);
 app.use('/api/meeting' , meetingRouter);
+app.use('/api/booking' , bookingRouter);
 
 //testing api
 app.get('/' , (req , res) => {

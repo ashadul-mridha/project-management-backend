@@ -42,6 +42,8 @@ db.comment = require('./commentModel')(sequelize, DataTypes);
 db.setting = require('./settingModel')(sequelize, DataTypes);
 db.meeting = require('./meetingModal')(sequelize, DataTypes);
 db.meetingUser = require('./meetingUserModal')(sequelize, DataTypes);
+db.booking = require('./bookingModel')(sequelize, DataTypes);
+db.bookingUser = require('./bookingUserModel')(sequelize, DataTypes);
 
 //database with model and create table
 db.sequelize.sync({force: false})
@@ -116,6 +118,14 @@ db.meeting.belongsToMany(db.user, {
 });
 db.user.belongsToMany(db.meeting, {
   through: "meeting_user",
+  foreignKey: "userId",
+});
+db.booking.belongsToMany(db.user, {
+  through: "booking_user",
+  foreignKey: "bookingId",
+});
+db.user.belongsToMany(db.booking, {
+  through: "booking_user",
   foreignKey: "userId",
 });
 
